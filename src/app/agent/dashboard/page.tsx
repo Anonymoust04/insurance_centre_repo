@@ -7,7 +7,6 @@ import type { AgentPerformance, CustomerProfile, MorningBriefItem } from '@/type
 import { AgentHeader } from '@/components/agent/AgentHeader';
 import { AgentStatCard } from '@/components/agent/AgentStatCard';
 import { AgentLeaderboardTable } from '@/components/agent/AgentLeaderboardTable';
-import { CustomerCard } from '@/components/agent/CustomerCard';
 import { MorningBrief } from '@/components/agent/MorningBrief';
 import { TodayPipeline } from '@/components/agent/TodayPipeline';
 import {
@@ -304,23 +303,6 @@ export default function AgentDashboardPage() {
           </div>
         </div>
 
-        {/* Customer preview */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-handwriting text-xl text-game-text flex items-center gap-2">
-              <IconUsers size={18} className="text-game-purple" />
-              All Customers
-            </h2>
-            <Link href="/agent/dashboard/customers" className="flex items-center gap-1 text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full hover:bg-game-purple hover:text-white transition-colors">
-              All customers <IconArrowRight size={12} />
-            </Link>
-          </div>
-          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {customers.slice(0, 3).map((c, i) => (
-              <CustomerCard key={c.id} customer={c} delay={i * 0.06} />
-            ))}
-          </div>
-        </div>
       </main>
     </div>
   );

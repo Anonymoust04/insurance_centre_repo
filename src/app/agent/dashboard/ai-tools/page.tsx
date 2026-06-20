@@ -76,10 +76,9 @@ export default function AiToolsPage() {
             <IconSparkles size={20} className="text-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-game-text">Mock AI Preview — 4 Advisor Productivity Tools</p>
+            <p className="text-sm font-bold text-game-text">4 Advisor Productivity Tools</p>
             <p className="text-xs text-game-purple mt-0.5">
-              Generated from local customer JSON. Advisor reviews before taking action.
-              Items labelled <span className="font-bold text-game-pink">&ldquo;AI Suggested&rdquo;</span> require your review — you decide every action.
+              Advisor reviews before taking action.
             </p>
           </div>
         </div>
