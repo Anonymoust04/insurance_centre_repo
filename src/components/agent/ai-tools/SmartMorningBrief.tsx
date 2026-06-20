@@ -130,7 +130,7 @@ export function SmartMorningBrief({ customers }: SmartMorningBriefProps) {
         <IconSparkles size={16} className="text-game-purple mt-0.5 shrink-0" />
         <div>
           <p className="text-xs font-bold text-game-text">Advisor reviews before acting · No auto-contact</p>
-          <p className="text-xs text-game-purple/70 mt-0.5">Generated from local customer JSON data. All priorities are logic-driven. AI narrative powered by Gemini — advisor must verify.</p>
+          <p className="text-xs text-game-purple/70 mt-0.5">All priorities are logic-driven. AI narrative powered by Gemini — advisor must verify.</p>
         </div>
       </div>
 
