@@ -39,7 +39,7 @@ export default function LeaderboardPage() {
 
         {/* Ranks 4–10 */}
         <div>
-          <p className="text-xs font-bold text-game-purple uppercase tracking-wider mb-4">Ranks 4 – 10</p>
+          <p className="text-xs font-bold text-game-purple uppercase tracking-wider mb-4">Ranks 4 – {agents.length}</p>
           <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
             {rest.map(agent => (
               <AgentLeaderboardCard

@@ -30,7 +30,7 @@ export function AgentSidebar() {
   return (
     <aside className="w-60 min-h-screen bg-game-yellow border-r-2 border-card-outline flex flex-col shrink-0">
       {/* Brand */}
-      <div className="px-5 py-5 border-b-2 border-card-outline/20">
+      <div className="px-5 h-[85px] flex items-center border-b-2 border-card-outline/20">
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="w-9 h-9 rounded-full bg-game-purple flex items-center justify-center shadow-sm">
             <IconBolt size={18} className="text-white" />
