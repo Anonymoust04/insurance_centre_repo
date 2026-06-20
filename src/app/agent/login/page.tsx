@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { IconBolt } from '@tabler/icons-react';
 import { AgentLoginForm } from '@/components/agent/AgentLoginForm';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Agent Login — SecureLife Insurance',
@@ -45,7 +46,7 @@ export default function AgentLoginPage() {
 
         <p className="text-center text-xs text-game-purple mt-5">
           Not an agent?{' '}
-          <a href="/" className="text-game-pink hover:opacity-80 font-bold transition-opacity">Go to main site</a>
+          <Link href="/" className="text-game-pink hover:opacity-80 font-bold transition-opacity">Go to main site</Link>
         </p>
       </div>
     </div>

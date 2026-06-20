@@ -27,6 +27,7 @@ export function HomePage() {
       const raw = localStorage.getItem(CARD_STORAGE_KEY);
       if (raw) {
         const saved = JSON.parse(raw) as CardData;
+        // eslint-disable-next-line
         setCardData(saved);
       }
     } catch {

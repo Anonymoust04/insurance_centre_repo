@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { IconBolt, IconMenu2, IconX } from '@tabler/icons-react';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -32,37 +33,37 @@ export function Navbar() {
     >
       <Container className="flex items-center justify-between h-20">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2 shrink-0 transform hover:rotate-2 transition-transform">
+        <Link href="/" className="flex items-center gap-2 shrink-0 transform hover:rotate-2 transition-transform">
           <div className="w-10 h-10 bg-pastel-pink border-sketch flex items-center justify-center shadow-sm">
             <IconBolt size={20} className="text-card-outline" />
           </div>
           <span className="font-handwriting font-bold text-card-outline text-3xl mt-1">
             Insurance <span className="text-pastel-pink drop-shadow-[1px_1px_0_var(--color-card-outline)]">Center</span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <ul className="hidden lg:flex items-center gap-7">
           {navItems.map((item) => (
             <li key={item.href}>
-              <a
+              <Link
                 href={item.href}
                 className="text-card-text/80 hover:text-pastel-pink font-bold font-handwriting text-2xl transition-colors"
               >
                 {item.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          <a
+          <Link
             href="/login"
             className="hidden md:inline-flex items-center px-4 py-2 text-xl font-bold font-handwriting text-card-text/80 hover:text-pastel-pink transition-colors"
           >
             Login
-          </a>
+          </Link>
           <Button variant="primary" size="sm" href="/signup" className="hidden md:inline-flex shadow-sm">
             Get Started
           </Button>
@@ -84,22 +85,22 @@ export function Navbar() {
           className="lg:hidden bg-card-cream border-t-4 border-sketch-sm px-4 py-4 flex flex-col gap-1"
         >
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className="text-card-text font-bold font-handwriting text-2xl py-3 border-b-2 border-card-outline/10"
             >
               {item.label}
-            </a>
+            </Link>
           ))}
           <div className="flex gap-2 pt-3">
-            <a
+            <Link
               href="/login"
               className="flex-1 text-center py-2.5 text-xl font-bold font-handwriting text-card-text border-sketch-sm rounded-xl hover:bg-pastel-pink/20 transition-colors"
             >
               Login
-            </a>
+            </Link>
             <Button variant="primary" size="sm" href="/signup" className="flex-1">
               Get Started
             </Button>

@@ -251,7 +251,7 @@ export function generateProtectionGap(customer: CustomerProfile): ProtectionGapO
   const criticalMissing = missing.filter(m => m.priority === 'critical').map(m => m.name);
   const hp = customer.protectionHpDays ?? customer.hpDays;
 
-  let riskSummary = customer.riskNotes ?? `${customer.fullName} has ${covered.length} active coverage item${covered.length !== 1 ? 's' : ''} but is missing ${missing.length} key protection product${missing.length !== 1 ? 's' : ''}.`;
+  const riskSummary = customer.riskNotes ?? `${customer.fullName} has ${covered.length} active coverage item${covered.length !== 1 ? 's' : ''} but is missing ${missing.length} key protection product${missing.length !== 1 ? 's' : ''}.`;
 
   const talkingPoints: string[] = [];
 
