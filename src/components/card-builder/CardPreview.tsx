@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CardData, EnergyType } from '@/types/card';
 import { IconFlame, IconDroplet, IconBolt, IconLeaf, IconEye, IconMountain, IconUser } from '@tabler/icons-react';
+import { planCards } from '@/data/plans';
 
 interface CardPreviewProps {
   data: CardData;
@@ -22,6 +23,8 @@ export function CardPreview({ data }: CardPreviewProps) {
   const { name, image, energyType, plan, currentAge, targetAge } = data;
   const energyConfig = getEnergyConfig(energyType);
   const [showTooltip, setShowTooltip] = useState(false);
+  
+  const selectedPlanData = planCards.find(p => p.id === plan) || planCards[0];
   
   // Protection Time = years of coverage remaining
   const pt = Math.max(0, targetAge - currentAge);
@@ -93,24 +96,20 @@ export function CardPreview({ data }: CardPreviewProps) {
 
         {/* Abilities Area */}
         <div className="flex flex-col gap-3 flex-1 px-1">
-          <div className="flex items-start gap-2">
-            <div className={`w-5 h-5 rounded-full border-[2px] border-card-outline flex-shrink-0 mt-1 ${energyConfig.bgClass}`}></div>
-            <div>
-              <h3 className="font-bold text-lg leading-tight">Protection Boost</h3>
-              <p className="text-sm font-sans leading-tight mt-1 opacity-90">Helps cover sudden health costs and unexpected challenges.</p>
+          {selectedPlanData?.abilities.map((ability, idx) => (
+            <div key={idx} className="flex items-start gap-2">
+              <div className="flex gap-0.5 mt-1">
+                {Array.from({ length: idx + 1 }).map((_, i) => (
+                  <div key={i} className={`w-5 h-5 rounded-full border-[2px] border-card-outline flex-shrink-0 ${energyConfig.bgClass}`}></div>
+                ))}
+                {idx === 0 && <div className="w-5 h-5 rounded-full border-[2px] border-card-outline flex-shrink-0 bg-gray-200"></div>}
+              </div>
+              <div>
+                <h3 className="font-bold text-lg leading-tight">{ability.title}</h3>
+                <p className="text-sm font-sans leading-tight mt-1 opacity-90">{ability.text}</p>
+              </div>
             </div>
-          </div>
-          
-          <div className="flex items-start gap-2">
-            <div className="flex gap-0.5 mt-1">
-              <div className={`w-5 h-5 rounded-full border-[2px] border-card-outline flex-shrink-0 ${energyConfig.bgClass}`}></div>
-              <div className="w-5 h-5 rounded-full border-[2px] border-card-outline flex-shrink-0 bg-gray-200"></div>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg leading-tight">Future Shield</h3>
-              <p className="text-sm font-sans leading-tight mt-1 opacity-90">Supports long-term family security until age {targetAge}.</p>
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* Bottom Metadata Bar */}
