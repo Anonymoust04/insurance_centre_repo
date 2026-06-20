@@ -1,0 +1,378 @@
+===========================================================
+  ADMIN PORTAL — IMAGE / ILLUSTRATION ASSET LIST
+  SecureLife Insurance · Agent Portal
+  All files go into:  /public/admin/
+===========================================================
+
+HOW TO USE
+----------
+1. Create a folder: public/admin/
+2. Name each file exactly as listed below (case-sensitive)
+3. Recommended format: PNG with transparent background, or WebP
+4. SVG is fine for logos and flat icons
+
+
+-----------------------------------------------------------
+  SECTION 1 — BRAND & SIDEBAR
+-----------------------------------------------------------
+
+FILE NAME          : logo-brand.png
+DESCRIPTION        : Main brand logo for Insurance Center.
+                     Lightning bolt inside a purple circle.
+                     Purple (#6B21D9) background, white bolt icon.
+                     Size: 40x40px or 80x80px (will be shown at 36x36px).
+USED IN            : AgentSidebar.tsx — top left brand area.
+REPLACE            : Currently using Tabler IconBolt (SVG icon).
+SUGGESTED STYLE    : Flat, minimal, solid circle logo.
+
+---
+
+FILE NAME          : logo-wordmark.png
+DESCRIPTION        : Text logo "Insurance Center" in purple Caveat-style
+                     handwriting font. "Insurance" regular weight,
+                     "Center" italic. Dark purple (#3B0764) color.
+                     Transparent background.
+USED IN            : AgentSidebar.tsx — beside the bolt icon.
+REPLACE            : Currently rendered as HTML text with font-handwriting.
+SUGGESTED STYLE    : Handwritten / friendly script, no border.
+
+---
+
+FILE NAME          : sidebar-trophy.png
+DESCRIPTION        : Cute gold trophy illustration with sparkle stars around it.
+                     Warm yellow/gold color (#FFD700). Cartoon/friendly style.
+                     Transparent background.
+                     Size: 80x80px recommended.
+USED IN            : AgentSidebar.tsx — motivational card at the bottom.
+REPLACE            : Currently using 🏆 emoji text.
+SUGGESTED STYLE    : Flat illustration, kawaii/cute, thick outline.
+
+---
+
+FILE NAME          : sidebar-sparkle.png  (or use sidebar-sparkle.svg)
+DESCRIPTION        : Small sparkle / star burst decoration.
+                     Purple or gold color. 3-4 points or 4-pointed star.
+                     Size: 20x20px.
+USED IN            : AgentSidebar.tsx — decorative sparkle in motivational card.
+REPLACE            : Currently using ✨ emoji text.
+SUGGESTED STYLE    : Flat SVG star shape preferred.
+
+
+-----------------------------------------------------------
+  SECTION 2 — DASHBOARD PAGE
+-----------------------------------------------------------
+
+FILE NAME          : agent-avatar.png
+DESCRIPTION        : Profile photo or avatar for the logged-in agent.
+                     Agent: Farah Diyana (agent-008).
+                     Circular crop ready (will be shown in a circle).
+                     Size: 80x80px minimum.
+USED IN            : AgentHeader.tsx — top right avatar circle.
+                     Dashboard page — rank card, greeting area.
+REPLACE            : Currently showing initials "FD" in a purple circle.
+SUGGESTED STYLE    : Friendly cartoon avatar, or real photo.
+
+---
+
+FILE NAME          : icon-rank-medal.png
+DESCRIPTION        : Medal / badge illustration for "My Rank" KPI card.
+                     Pink and purple color theme (#FF4FB8 / #6B21D9).
+                     Circular medal with a ribbon.
+                     Size: 44x44px.
+USED IN            : Dashboard page — My Rank stat card icon box.
+REPLACE            : Currently using Tabler IconMedal SVG.
+SUGGESTED STYLE    : Flat cartoon medal, cute style.
+
+---
+
+FILE NAME          : icon-rocket.png
+DESCRIPTION        : Cute rocket illustration for motivational banners.
+                     Purple rocket with pink flame.
+                     Transparent background.
+                     Size: 40x40px.
+USED IN            : MotivationalBanner.tsx — right side decoration.
+                     Dashboard page — inline motivational strip.
+REPLACE            : Currently using 🚀 emoji text.
+SUGGESTED STYLE    : Flat cartoon, playful, facing upward-right.
+
+---
+
+FILE NAME          : icon-star-gold.png
+DESCRIPTION        : Gold star illustration for rankings and motivation.
+                     Bright gold (#FFD700) with subtle shadow.
+                     Transparent background.
+                     Size: 32x32px.
+USED IN            : Dashboard motivational strip, leaderboard rank badges.
+REPLACE            : Currently using ⭐ emoji text.
+SUGGESTED STYLE    : Flat, 5-pointed star, slightly tilted for energy.
+
+
+-----------------------------------------------------------
+  SECTION 3 — LEADERBOARD PAGE
+-----------------------------------------------------------
+
+FILE NAME          : badge-rank1.png
+DESCRIPTION        : Gold medal / badge for Rank #1.
+                     Shiny gold color (#FFD700) with "#1" text or trophy icon.
+                     Circular shape. Size: 32x32px.
+USED IN            : AgentLeaderboardCard.tsx — top right of rank-1 card.
+                     AgentLeaderboardTable.tsx — rank column.
+REPLACE            : Currently using 🥇 emoji text.
+
+---
+
+FILE NAME          : badge-rank2.png
+DESCRIPTION        : Silver medal / badge for Rank #2.
+                     Silver color (#C0C0C0). Circular shape. Size: 32x32px.
+USED IN            : AgentLeaderboardCard.tsx, AgentLeaderboardTable.tsx.
+REPLACE            : Currently using 🥈 emoji text.
+
+---
+
+FILE NAME          : badge-rank3.png
+DESCRIPTION        : Bronze medal / badge for Rank #3.
+                     Bronze/copper color (#CD7F32). Circular shape. Size: 32x32px.
+USED IN            : AgentLeaderboardCard.tsx, AgentLeaderboardTable.tsx.
+REPLACE            : Currently using 🥉 emoji text.
+
+---
+
+FILE NAME          : illustration-podium.png
+DESCRIPTION        : A podium with 3 levels (1st, 2nd, 3rd place) illustration.
+                     Purple and yellow color theme.
+                     Optional: add tiny trophy figures on each step.
+                     Size: 300x160px.
+USED IN            : Leaderboard page — top section header decoration.
+REPLACE            : Not currently used. New decorative addition.
+SUGGESTED STYLE    : Flat cartoon, pastel colors matching the theme.
+
+
+-----------------------------------------------------------
+  SECTION 4 — CUSTOMER CARDS
+-----------------------------------------------------------
+
+FILE NAME          : avatar-default.png
+DESCRIPTION        : Generic default customer avatar (silhouette or friendly icon).
+                     Used when no specific photo exists.
+                     Circular. Purple (#6B21D9) background, white figure.
+                     Size: 44x44px.
+USED IN            : CustomerCard.tsx — customer profile circle.
+REPLACE            : Currently showing 2-letter initials (e.g. "TS", "MF").
+NOTE               : Each customer can also have individual avatars (see below).
+
+---
+
+FILE NAME          : icon-hp-shield.png
+DESCRIPTION        : Shield icon for the "Protection HP" bar label.
+                     Purple outlined shield. Clean flat style.
+                     Size: 16x16px or 24x24px SVG preferred.
+USED IN            : CustomerCard.tsx — HP bar section.
+REPLACE            : Currently using Tabler IconShield SVG.
+NOTE               : Only replace if you want a custom branded shield.
+
+---
+
+FILE NAME          : badge-urgent.png
+DESCRIPTION        : Small "Urgent" badge / stamp illustration.
+                     Hot pink (#FF4FB8) background, white bold text "Urgent".
+                     Rounded rectangle or circle. Size: 60x24px.
+USED IN            : CustomerCard.tsx — urgency indicator strip.
+REPLACE            : Currently a styled HTML span with CSS.
+NOTE               : Optional — CSS version works fine.
+
+---
+
+FILE NAME          : icon-flame.png
+DESCRIPTION        : Orange/pink flame icon for payment streak indicator.
+                     Warm gradient: orange to pink.
+                     Size: 16x16px or SVG preferred.
+USED IN            : CustomerCard.tsx — payment streak value.
+REPLACE            : Currently using Tabler IconFlame SVG.
+NOTE               : Only replace if you want a more animated/custom flame.
+
+
+-----------------------------------------------------------
+  SECTION 5 — CUSTOMER INDIVIDUAL AVATARS  (optional set)
+-----------------------------------------------------------
+  Put these in: public/admin/avatars/
+  All should be: circular-crop-ready PNG, 80x80px minimum.
+  Naming format: avatar-{customer-id}.png
+
+FILE NAME          : avatars/avatar-cust-001.png   → Tan Siew Ling (Female, 38, Software Engineer)
+FILE NAME          : avatars/avatar-cust-002.png   → Mohd Fadzillah (Male, 45, Business Owner)
+FILE NAME          : avatars/avatar-cust-003.png   → Grace Ong (Female, 29, Nurse)
+FILE NAME          : avatars/avatar-cust-004.png   → Ravi Chandran (Male, 52, Retired Teacher)
+FILE NAME          : avatars/avatar-cust-005.png   → Nurul Hafizah (Female, 34, Accountant)
+FILE NAME          : avatars/avatar-cust-006.png   → David Lim (Male, 41, Marketing Manager)
+FILE NAME          : avatars/avatar-cust-007.png   → Alicia Wong (Female, 31, Teacher)
+FILE NAME          : avatars/avatar-cust-008.png   → Ahmad Razif (Male, 27, Civil Engineer)
+FILE NAME          : avatars/avatar-cust-009.png   → Priyanka Nair (Female, 33, HR Manager)
+FILE NAME          : avatars/avatar-cust-010.png   → Kevin Chong (Male, 25, Graphic Designer)
+FILE NAME          : avatars/avatar-cust-011.png   → Siti Rohana (Female, 44, Homemaker)
+FILE NAME          : avatars/avatar-cust-012.png   → Lim Wei Ming (Male, 48, Operations Director)
+
+
+-----------------------------------------------------------
+  SECTION 6 — AI TOOLS PAGE
+-----------------------------------------------------------
+
+FILE NAME          : icon-ai-morning.png
+DESCRIPTION        : Sun / morning illustration for Smart Morning Brief tool card.
+                     Warm yellow sun with soft rays. Cute cartoon style.
+                     Size: 36x36px.
+USED IN            : AiToolCard.tsx — Morning Brief tool icon.
+REPLACE            : Currently using Tabler IconSunHigh SVG.
+
+---
+
+FILE NAME          : icon-ai-draft.png
+DESCRIPTION        : Speech bubble / message icon for Follow-up Draft Generator.
+                     Purple speech bubble with a pencil or sparkle inside.
+                     Size: 36x36px.
+USED IN            : AiToolCard.tsx — Draft Generator tool icon.
+REPLACE            : Currently using Tabler IconMessage2 SVG.
+
+---
+
+FILE NAME          : icon-ai-gap.png
+DESCRIPTION        : Shield with a magnifying glass for Protection Gap Explainer.
+                     Purple shield with a small search/zoom icon inside.
+                     Size: 36x36px.
+USED IN            : AiToolCard.tsx — Protection Gap tool icon.
+REPLACE            : Currently using Tabler IconShieldSearch SVG.
+
+---
+
+FILE NAME          : icon-ai-meeting.png
+DESCRIPTION        : Clipboard with a checkmark for Meeting Prep Card.
+                     Purple clipboard, pink checkmark.
+                     Size: 36x36px.
+USED IN            : AiToolCard.tsx — Meeting Prep tool icon.
+REPLACE            : Currently using Tabler IconClipboardText SVG.
+
+---
+
+FILE NAME          : illustration-ai-banner.png
+DESCRIPTION        : Small decorative banner / robot/magic wand illustration
+                     for the AI Tools intro card.
+                     Purple wizard hat or magic wand with sparkles.
+                     Size: 48x48px.
+USED IN            : ai-tools/page.tsx — intro banner left icon.
+REPLACE            : Currently using Tabler IconSparkles SVG.
+SUGGESTED STYLE    : Cute flat cartoon, pastel purple + pink.
+
+
+-----------------------------------------------------------
+  SECTION 7 — LOGIN PAGE
+-----------------------------------------------------------
+
+FILE NAME          : login-illustration.png
+DESCRIPTION        : Friendly illustration for the agent login page.
+                     An advisor/agent character holding a shield or clipboard.
+                     Soft colors: purple, yellow, pink.
+                     Size: 200x200px.
+USED IN            : agent/login/page.tsx — decorative element above the card.
+REPLACE            : Not currently used. Optional new addition.
+SUGGESTED STYLE    : Flat cartoon character, friendly face, gender-neutral.
+
+---
+
+FILE NAME          : login-logo.png
+DESCRIPTION        : Full logo for the login page header.
+                     Same as logo-brand.png but larger format.
+                     Purple circle + bolt + wordmark combined.
+                     Size: 160x60px horizontal, or 80x80px square.
+USED IN            : agent/login/page.tsx — top center brand area.
+REPLACE            : Currently using IconBolt + HTML text.
+
+
+-----------------------------------------------------------
+  SECTION 8 — DECORATIVE / BACKGROUND ELEMENTS
+-----------------------------------------------------------
+
+FILE NAME          : bg-card-pattern.png  (optional)
+DESCRIPTION        : Subtle repeating pattern for card backgrounds.
+                     Very light purple dots or tiny diamond shapes.
+                     Opacity: 5-10% overlay.
+                     Size: 200x200px tile (seamless repeat).
+USED IN            : Any card background as subtle texture.
+REPLACE            : Not currently used. Optional decorative upgrade.
+
+---
+
+FILE NAME          : decoration-stars.png  (or SVG)
+DESCRIPTION        : Cluster of 3-5 small stars / sparkles in various sizes.
+                     Gold and pink colors. Transparent background.
+                     Size: 80x40px.
+USED IN            : Sidebar motivational card, leaderboard headers.
+REPLACE            : Currently using ✨ emoji and CSS.
+
+---
+
+FILE NAME          : decoration-confetti.png  (optional)
+DESCRIPTION        : Confetti burst illustration for milestone/celebration moments.
+                     Multicolor: pink, purple, yellow, mint.
+                     Transparent background. Size: 120x80px.
+USED IN            : Dashboard — milestone celebration areas.
+REPLACE            : Not currently used. Optional for future feature.
+
+
+===========================================================
+  SUMMARY TABLE
+===========================================================
+
+  FOLDER: public/admin/
+
+  REQUIRED (currently using placeholder icons/emoji):
+  ---------------------------------------------------
+  logo-brand.png              → Sidebar bolt logo
+  agent-avatar.png            → Header agent photo (Farah Diyana)
+  sidebar-trophy.png          → Sidebar motivational card
+  badge-rank1.png             → Leaderboard #1
+  badge-rank2.png             → Leaderboard #2
+  badge-rank3.png             → Leaderboard #3
+  icon-rocket.png             → Motivational banners
+
+  OPTIONAL (Tabler icon replacements):
+  -------------------------------------------
+  icon-rank-medal.png         → Stat card icon
+  icon-ai-morning.png         → AI tool card
+  icon-ai-draft.png           → AI tool card
+  icon-ai-gap.png             → AI tool card
+  icon-ai-meeting.png         → AI tool card
+  sidebar-sparkle.svg         → Sidebar sparkle deco
+  login-logo.png              → Login page header
+
+  CUSTOMER AVATARS (put in public/admin/avatars/):
+  -------------------------------------------------
+  avatar-cust-001.png  through  avatar-cust-012.png
+
+  ILLUSTRATIONS (new decorative additions):
+  -----------------------------------------
+  illustration-podium.png     → Leaderboard page header
+  login-illustration.png      → Login page
+  illustration-ai-banner.png  → AI Tools page
+
+===========================================================
+  NOTES FOR DEVELOPER
+===========================================================
+
+  1. All images in /public/ are served from the root URL.
+     Example: public/admin/logo-brand.png → accessed as /admin/logo-brand.png
+
+  2. In Next.js static export, use <img> with src="/admin/logo-brand.png"
+     or Next.js <Image> component with unoptimized={true} (already set in config).
+
+  3. Recommended sizes are at 1x. Provide 2x (@2x) versions for retina screens
+     by naming them: logo-brand@2x.png (optional but improves quality on mobile).
+
+  4. All images with transparent backgrounds should be saved as PNG.
+     Photos/illustrations can use WebP for smaller file size.
+
+  5. The current build uses ONLY Tabler icon SVGs and emoji for all visuals.
+     Swapping to real images is purely cosmetic — no code changes required
+     except updating src="" attributes where applicable.
+
+===========================================================
+  END OF FILE
+===========================================================
