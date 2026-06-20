@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return new Response(imageBuffer, {
+    return new Response(imageBuffer as any, {
       headers: {
         'Content-Type': 'image/png',
         'Cache-Control': 'no-cache',
