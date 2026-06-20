@@ -8,7 +8,6 @@ import { AgentHeader } from '@/components/agent/AgentHeader';
 import { AgentStatCard } from '@/components/agent/AgentStatCard';
 import { MorningBrief } from '@/components/agent/MorningBrief';
 import { TodayPipeline } from '@/components/agent/TodayPipeline';
-import { AgentMissions } from '@/components/agent/AgentMissions';
 import {
   IconFileCheck,
   IconCurrencyDollar,
@@ -245,8 +244,6 @@ export default function AgentDashboardPage() {
           </div>
         </div>
 
-        {/* Agent Daily Missions */}
-        <AgentMissions />
 
       </main>
     </div>
