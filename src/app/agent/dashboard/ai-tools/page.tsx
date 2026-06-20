@@ -9,19 +9,23 @@ import { SmartMorningBrief } from '@/components/agent/ai-tools/SmartMorningBrief
 import { FollowUpDraftGenerator } from '@/components/agent/ai-tools/FollowUpDraftGenerator';
 import { ProtectionGapExplainer } from '@/components/agent/ai-tools/ProtectionGapExplainer';
 import { MeetingPrepCard } from '@/components/agent/ai-tools/MeetingPrepCard';
+import { RenewalRadar } from '@/components/agent/ai-tools/RenewalRadar';
+import { LifeEventSignal } from '@/components/agent/ai-tools/LifeEventSignal';
 import {
   IconSunHigh,
   IconMessage2,
   IconShieldSearch,
   IconClipboardText,
+  IconRadar,
+  IconHeartHandshake,
   IconSparkles,
 } from '@tabler/icons-react';
 
 const customers = profilesData as CustomerProfile[];
 
-type ToolId = 'morning-brief' | 'followup-draft' | 'protection-gap' | 'meeting-prep';
+type ToolId = 'morning-brief' | 'followup-draft' | 'protection-gap' | 'meeting-prep' | 'renewal-radar' | 'life-event';
 
-const tools: { id: ToolId; icon: React.ElementType; title: string; description: string }[] = [
+const tools: { id: ToolId; icon: React.ElementType; title: string; description: string; isNew?: boolean }[] = [
   {
     id: 'morning-brief',
     icon: IconSunHigh,
@@ -37,14 +41,28 @@ const tools: { id: ToolId; icon: React.ElementType; title: string; description: 
   {
     id: 'protection-gap',
     icon: IconShieldSearch,
-    title: 'Protection Gap Explainer',
+    title: 'Client Snapshot',
     description: 'Covered areas vs gaps, risk impact, talking points, next recommendation.',
   },
+  // {
+  //   id: 'meeting-prep',
+  //   icon: IconClipboardText,
+  //   title: 'Meeting Prep Card',
+  //   description: 'One-page brief: life stage, HP, boosters, coverage, conversation opener.',
+  // },
   {
-    id: 'meeting-prep',
-    icon: IconClipboardText,
-    title: 'Meeting Prep Card',
-    description: 'One-page brief: life stage, HP, boosters, coverage, conversation opener.',
+    id: 'renewal-radar',
+    icon: IconRadar,
+    title: 'Renewal Radar',
+    description: 'Surfaces who needs attention most — HP, inactivity, life events, renewal timing.',
+    isNew: true,
+  },
+  {
+    id: 'life-event',
+    icon: IconHeartHandshake,
+    title: 'Life Event Signal',
+    description: 'Detects newborns, engagements, retirement windows, and career peaks — suggests the right review.',
+    isNew: true,
   },
 ];
 
@@ -53,10 +71,12 @@ export default function AiToolsPage() {
 
   const renderTool = () => {
     switch (activeTool) {
-      case 'morning-brief': return <SmartMorningBrief customers={customers} />;
+      case 'morning-brief':  return <SmartMorningBrief customers={customers} />;
       case 'followup-draft': return <FollowUpDraftGenerator customers={customers} />;
       case 'protection-gap': return <ProtectionGapExplainer customers={customers} />;
-      case 'meeting-prep': return <MeetingPrepCard customers={customers} />;
+      case 'meeting-prep':   return <MeetingPrepCard customers={customers} />;
+      case 'renewal-radar':  return <RenewalRadar customers={customers} />;
+      case 'life-event':     return <LifeEventSignal customers={customers} />;
     }
   };
 
@@ -66,7 +86,7 @@ export default function AiToolsPage() {
     <div className="flex flex-col min-h-screen">
       <AgentHeader
         title="✨ AI Advisor Tools"
-        subtitle="Mock AI productivity tools — logic-driven from your local customer data"
+        subtitle="Advisor reviews before taking action."
       />
 
       <main className="flex-1 p-6 overflow-y-auto">
@@ -76,7 +96,7 @@ export default function AiToolsPage() {
             <IconSparkles size={20} className="text-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-game-text">4 Advisor Productivity Tools</p>
+            <p className="text-sm font-bold text-game-text">5 Advisor Productivity Tools</p>
             <p className="text-xs text-game-purple mt-0.5">
               Advisor reviews before taking action.
             </p>

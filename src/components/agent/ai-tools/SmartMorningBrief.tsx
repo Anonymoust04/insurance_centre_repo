@@ -147,7 +147,8 @@ export function SmartMorningBrief({ customers }: SmartMorningBriefProps) {
         </div>
 
         {aiStatus === 'idle' && (
-          <p className="text-xs text-game-purple/60 mb-4">Click below to get an AI-written narrative summary of your morning. Requires <code className="bg-pastel-lavender px-1 rounded text-game-purple">GEMINI_API_KEY</code>.</p>
+          <p className="text-xs text-game-purple/60 mb-4">Click below to get an AI-written narrative summary of your morning. 
+</p>
         )}
 
         {aiStatus === 'error' && (

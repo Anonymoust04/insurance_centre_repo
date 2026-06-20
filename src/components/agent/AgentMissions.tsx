@@ -71,7 +71,7 @@ const INITIAL_MISSIONS: AgentMission[] = [
   {
     id: 'am-005',
     title: 'Run a protection gap check',
-    description: 'Use the Protection Gap Explainer on at least one client to prepare your pitch.',
+    description: 'Use the Client Snapshot on at least one client to prepare your pitch.',
     reward: '+40 XP',
     xp: 40,
     progress: 0,
