@@ -12,7 +12,7 @@ export function Input({ label, error, className, id, endAdornment, ...props }: I
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor={id}
-        className="text-sm font-semibold text-slate-700 dark:text-slate-300"
+        className="text-lg font-bold text-card-outline"
       >
         {label}
       </label>
@@ -20,10 +20,10 @@ export function Input({ label, error, className, id, endAdornment, ...props }: I
         <input
           id={id}
           className={cn(
-            'w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700',
-            'bg-white dark:bg-slate-900 text-slate-900 dark:text-white',
-            'placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm',
-            'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+            'w-full px-4 py-3 border-sketch-sm',
+            'bg-white text-card-text font-sans',
+            'placeholder:text-slate-400 text-lg',
+            'focus:outline-none focus:ring-4 focus:ring-pastel-lavender/50',
             'transition-all duration-200',
             endAdornment ? 'pr-12' : undefined,
             error && 'border-red-400 focus:ring-red-500',
@@ -35,7 +35,7 @@ export function Input({ label, error, className, id, endAdornment, ...props }: I
           <div className="absolute right-3 top-1/2 -translate-y-1/2">{endAdornment}</div>
         )}
       </div>
-      {error && <p className="text-xs text-red-500 mt-0.5">{error}</p>}
+      {error && <p className="text-sm text-red-500 mt-0.5 font-bold font-handwriting">{error}</p>}
     </div>
   );
 }
