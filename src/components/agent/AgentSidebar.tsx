@@ -6,12 +6,9 @@ import {
   IconLayoutDashboard,
   IconTrophy,
   IconUsers,
-  IconChartBar,
-  IconUserCircle,
   IconLogout,
   IconBolt,
   IconSparkles,
-  IconSettings,
 } from '@tabler/icons-react';
 import { cn } from '@/utils/cn';
 
@@ -20,9 +17,6 @@ const navItems = [
   { label: 'AI Tools', href: '/agent/dashboard/ai-tools', icon: IconSparkles, badge: 'New' },
   { label: 'Leaderboard', href: '/agent/dashboard/leaderboard', icon: IconTrophy },
   { label: 'Customers', href: '/agent/dashboard/customers', icon: IconUsers },
-  { label: 'Sales Performance', href: '/agent/dashboard/sales', icon: IconChartBar },
-  { label: 'Profile', href: '/agent/dashboard/profile', icon: IconUserCircle },
-  { label: 'Settings', href: '/agent/dashboard/settings', icon: IconSettings },
 ];
 
 export function AgentSidebar() {
