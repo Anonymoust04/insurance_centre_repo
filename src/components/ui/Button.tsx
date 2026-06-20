@@ -24,26 +24,26 @@ export function Button({
   type = 'button',
 }: ButtonProps) {
   const base =
-    'inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-colors cursor-pointer';
+    'inline-flex items-center justify-center gap-2 font-bold font-handwriting rounded-xl transition-colors cursor-pointer text-card-outline';
 
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm shadow-blue-500/20',
-    secondary: 'bg-cyan-500 text-white hover:bg-cyan-600',
-    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950',
-    ghost: 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800',
+    primary: 'bg-pastel-pink border-sketch hover:bg-pink-300 shadow-md',
+    secondary: 'bg-pastel-yellow border-sketch hover:bg-yellow-300 shadow-md',
+    outline: 'border-sketch-sm bg-white hover:bg-pastel-lavender/30',
+    ghost: 'hover:bg-pastel-yellow/50 text-card-text/80',
   };
 
   const sizes = {
-    sm: 'px-4 py-2 text-sm',
-    md: 'px-6 py-3 text-base',
-    lg: 'px-8 py-4 text-base font-semibold',
+    sm: 'px-4 py-2 text-lg',
+    md: 'px-6 py-3 text-xl',
+    lg: 'px-8 py-4 text-2xl',
   };
 
   const classes = cn(base, variants[variant], sizes[size], className);
 
   if (href) {
     return (
-      <motion.a href={href} className={classes} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+      <motion.a href={href} className={classes} whileHover={{ scale: 1.05, rotate: -1 }} whileTap={{ scale: 0.95 }}>
         {children}
       </motion.a>
     );
@@ -54,8 +54,8 @@ export function Button({
       type={type}
       onClick={onClick}
       className={classes}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: 1.05, rotate: -1 }}
+      whileTap={{ scale: 0.95 }}
     >
       {children}
     </motion.button>

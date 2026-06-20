@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { IconEye, IconEyeOff, IconArrowRight } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+import { IconEye, IconEyeOff, IconWand } from '@tabler/icons-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 
@@ -24,6 +25,7 @@ interface FormState {
 }
 
 export function SignupForm() {
+  const router = useRouter();
   const [form, setForm] = useState<FormState>({
     fullName: '',
     email: '',
@@ -35,7 +37,6 @@ export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState(false);
 
   const set = (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((prev) => ({ ...prev, [key]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
@@ -63,7 +64,7 @@ export function SignupForm() {
     } else if (form.password !== form.confirmPassword) {
       errs.confirmPassword = 'Passwords do not match.';
     }
-    if (!form.terms) errs.terms = 'You must accept the terms to continue.';
+    if (!form.terms) errs.terms = 'You must accept the rules to continue.';
     return errs;
   };
 
@@ -71,30 +72,19 @@ export function SignupForm() {
     e.preventDefault();
     const errs = validate();
     setErrors(errs);
-    if (Object.keys(errs).length === 0) setSubmitted(true);
+    if (Object.keys(errs).length === 0) {
+      // Redirect straight to create-card page
+      router.push('/create-card');
+    }
   };
 
-  if (submitted) {
-    return (
-      <div className="text-center py-6">
-        <div className="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-          <IconArrowRight size={24} className="text-blue-600" />
-        </div>
-        <p className="font-bold text-slate-900 dark:text-white text-lg mb-1">Account created!</p>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          This is a UI demo — no backend is connected.
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
       <Input
         id="fullName"
-        label="Full Name"
+        label="Trainer Name"
         type="text"
-        placeholder="Jane Thornton"
+        placeholder="Ash Ketchum"
         value={form.fullName}
         onChange={set('fullName')}
         error={errors.fullName}
@@ -125,7 +115,7 @@ export function SignupForm() {
 
       <Input
         id="password"
-        label="Password"
+        label="Secret Password"
         type={showPassword ? 'text' : 'password'}
         placeholder="Min. 8 characters"
         value={form.password}
@@ -136,10 +126,10 @@ export function SignupForm() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            className="text-card-outline/60 hover:text-card-outline transition-colors"
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
-            {showPassword ? <IconEyeOff size={17} /> : <IconEye size={17} />}
+            {showPassword ? <IconEyeOff size={24} /> : <IconEye size={24} />}
           </button>
         }
       />
@@ -157,44 +147,44 @@ export function SignupForm() {
           <button
             type="button"
             onClick={() => setShowConfirm(!showConfirm)}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            className="text-card-outline/60 hover:text-card-outline transition-colors"
             aria-label={showConfirm ? 'Hide password' : 'Show password'}
           >
-            {showConfirm ? <IconEyeOff size={17} /> : <IconEye size={17} />}
+            {showConfirm ? <IconEyeOff size={24} /> : <IconEye size={24} />}
           </button>
         }
       />
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 mt-2">
         <label className="flex items-start gap-3 cursor-pointer">
           <input
             id="terms"
             type="checkbox"
             checked={form.terms}
             onChange={set('terms')}
-            className="mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+            className="mt-1 w-5 h-5 rounded border-2 border-card-outline text-pastel-pink focus:ring-pastel-pink cursor-pointer"
           />
-          <span className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+          <span className="text-lg font-bold text-card-text/90 leading-tight">
             I agree to the{' '}
-            <a href="#" className="text-blue-600 hover:text-blue-700 font-semibold">
-              Terms of Service
+            <a href="#" className="text-pastel-pink underline hover:text-pink-400 font-handwriting text-2xl">
+              Trainer Rules
             </a>{' '}
             and{' '}
-            <a href="#" className="text-blue-600 hover:text-blue-700 font-semibold">
-              Privacy Policy
+            <a href="#" className="text-pastel-pink underline hover:text-pink-400 font-handwriting text-2xl">
+              Privacy Scroll
             </a>
           </span>
         </label>
-        {errors.terms && <p className="text-xs text-red-500 ml-7">{errors.terms}</p>}
+        {errors.terms && <p className="text-sm font-handwriting font-bold text-red-500 ml-8">{errors.terms}</p>}
       </div>
 
-      <Button type="submit" variant="primary" size="lg" className="w-full mt-1">
-        Create Account <IconArrowRight size={18} />
+      <Button type="submit" variant="primary" size="lg" className="w-full mt-4 py-4 text-2xl">
+        Start Journey <IconWand size={24} />
       </Button>
 
-      <p className="text-center text-sm text-slate-500 dark:text-slate-400">
-        Already have an account?{' '}
-        <a href="/login" className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+      <p className="text-center text-lg font-bold text-card-text/70 mt-2">
+        Already a trainer?{' '}
+        <a href="/login" className="text-card-outline font-handwriting text-2xl hover:text-pastel-pink transition-colors">
           Sign in
         </a>
       </p>
