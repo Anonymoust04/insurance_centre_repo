@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   IconLayoutDashboard,
@@ -11,6 +12,8 @@ import {
   IconSparkles,
 } from '@tabler/icons-react';
 import { cn } from '@/utils/cn';
+import trophyImg from '@/assets/sidebar-trophy.png';
+import sparkleImg from '@/assets/sidebar-sparkle.png';
 
 const navItems = [
   { label: 'Dashboard', href: '/agent/dashboard', icon: IconLayoutDashboard },
@@ -52,7 +55,7 @@ export function AgentSidebar() {
                   : 'text-game-purple-deep hover:bg-pastel-lavender/60 border-2 border-transparent'
               )}
             >
-              <Icon size={18} stroke={isActive ? 2 : 1.8} className={isActive ? 'text-game-purple' : 'text-game-purple'} />
+              <Icon size={18} stroke={isActive ? 2 : 1.8} className="text-game-purple" />
               <span className="flex-1">{label}</span>
               {badge && (
                 <span className="text-xs font-bold bg-game-pink text-white px-2 py-0.5 rounded-full">{badge}</span>
@@ -65,14 +68,14 @@ export function AgentSidebar() {
       {/* Motivational card */}
       <div className="mx-3 mb-3 p-4 bg-pastel-lavender border-2 border-card-outline/40 rounded-3xl">
         <div className="flex items-center gap-1.5 mb-2">
-          <span className="text-sm">✨</span>
-          <p className="text-xs font-bold text-game-text font-handwriting text-base">You're doing great!</p>
+          <Image src={sparkleImg} alt="sparkle" width={18} height={18} className="shrink-0" unoptimized />
+          <p className="font-handwriting font-bold text-game-text text-base">You&apos;re doing great!</p>
         </div>
         <p className="text-xs text-game-purple-deep leading-relaxed mb-3">
           Keep helping more families build their protection.
         </p>
         <div className="flex justify-center">
-          <span className="text-3xl">🏆</span>
+          <Image src={trophyImg} alt="trophy" width={56} height={56} className="object-contain drop-shadow-sm" unoptimized />
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   IconAlertTriangle,
@@ -11,10 +11,14 @@ import {
   IconFlame,
   IconSparkles,
   IconClock,
+  IconCopy,
+  IconCheck,
+  IconLoader2,
 } from '@tabler/icons-react';
 import { cn } from '@/utils/cn';
 import { generateMorningBrief } from '@/lib/aiAdvisorLogic';
 import type { CustomerProfile } from '@/types/agent';
+import type { MorningBriefPromptData } from '@/lib/ai-prompts';
 
 interface SmartMorningBriefProps {
   customers: CustomerProfile[];
@@ -24,7 +28,16 @@ function MockAiBadge() {
   return (
     <div className="inline-flex items-center gap-1.5 bg-pastel-lavender text-game-purple text-xs font-bold px-2.5 py-1 rounded-full border border-card-outline/30">
       <IconSparkles size={11} />
-      Mock AI Preview
+      Local Logic
+    </div>
+  );
+}
+
+function GeminiBadge() {
+  return (
+    <div className="inline-flex items-center gap-1.5 bg-game-purple text-white text-xs font-bold px-2.5 py-1 rounded-full">
+      <IconSparkles size={11} />
+      Gemini AI
     </div>
   );
 }
@@ -47,21 +60,151 @@ function HpPill({ hp }: { hp: number }) {
   return <span className={cn('text-xs font-bold', color)}>{hp}d HP</span>;
 }
 
+type AIStatus = 'idle' | 'loading' | 'success' | 'error';
+
 export function SmartMorningBrief({ customers }: SmartMorningBriefProps) {
   const brief = useMemo(() => generateMorningBrief(customers), [customers]);
+  const [aiStatus, setAiStatus] = useState<AIStatus>('idle');
+  const [aiNarrative, setAiNarrative] = useState<string | null>(null);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleGenerateAI = async () => {
+    setAiStatus('loading');
+    setAiError(null);
+
+    const payload: MorningBriefPromptData = {
+      agentName: 'Farah Diyana',
+      date: '2026-06-20',
+      criticalCount: brief.summary.criticalCount,
+      urgentCount: brief.summary.urgentCount,
+      followUpsDueCount: brief.summary.followUpsDueCount,
+      urgentClients: brief.urgentClients.map(c => ({
+        name: c.fullName,
+        hp: c.protectionHpDays ?? c.hpDays,
+        followUp: c.nextFollowUpDate ?? null,
+      })),
+      recentActivities: brief.recentActivities.map(e => ({
+        client: e.customerName,
+        event: e.activity.title,
+      })),
+      topPriority: brief.priorityList.map(e => ({
+        name: e.customer.fullName,
+        score: e.score,
+        reasons: e.reasons,
+      })),
+    };
+
+    try {
+      const res = await fetch('/api/ai/morning-brief', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json()) as { narrative?: string; error?: string };
+      if (!res.ok || data.error) {
+        setAiError(data.error ?? 'AI generation failed. Check your GEMINI_API_KEY.');
+        setAiStatus('error');
+      } else {
+        setAiNarrative(data.narrative ?? '');
+        setAiStatus('success');
+      }
+    } catch {
+      setAiError('Could not reach the AI service. Make sure the dev server is running.');
+      setAiStatus('error');
+    }
+  };
+
+  const handleCopy = () => {
+    if (!aiNarrative) return;
+    navigator.clipboard.writeText(aiNarrative).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   return (
     <div className="space-y-5">
-      {/* Disclaimer */}
+      {/* Safety disclaimer */}
       <div className="flex items-start gap-3 p-4 bg-pastel-lavender rounded-3xl border-2 border-card-outline/40">
         <IconSparkles size={16} className="text-game-purple mt-0.5 shrink-0" />
         <div>
-          <p className="text-xs font-bold text-game-text">AI Suggested · Advisor reviews before acting</p>
-          <p className="text-xs text-game-purple/70 mt-0.5">Generated from local customer JSON data. All priorities are logic-driven, not from a live AI model.</p>
+          <p className="text-xs font-bold text-game-text">Advisor reviews before acting · No auto-contact</p>
+          <p className="text-xs text-game-purple/70 mt-0.5">Generated from local customer JSON data. All priorities are logic-driven. AI narrative powered by Gemini — advisor must verify.</p>
         </div>
       </div>
 
-      {/* Morning Summary */}
+      {/* AI Narrative section */}
+      <div className="bg-card-cream rounded-3xl p-5 border-2 border-card-outline/50 shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-xl bg-game-purple flex items-center justify-center">
+              <IconSparkles size={14} className="text-white" />
+            </div>
+            <h3 className="font-bold text-sm text-game-text">Gemini AI Morning Brief</h3>
+          </div>
+          {aiStatus === 'success' ? <GeminiBadge /> : null}
+        </div>
+
+        {aiStatus === 'idle' && (
+          <p className="text-xs text-game-purple/60 mb-4">Click below to get an AI-written narrative summary of your morning. Requires <code className="bg-pastel-lavender px-1 rounded text-game-purple">GEMINI_API_KEY</code>.</p>
+        )}
+
+        {aiStatus === 'error' && (
+          <div className="p-3 bg-red-50 border-2 border-red-200 rounded-2xl mb-4">
+            <p className="text-xs font-bold text-red-600">AI Error</p>
+            <p className="text-xs text-red-500 mt-0.5">{aiError}</p>
+          </div>
+        )}
+
+        {aiStatus === 'success' && aiNarrative && (
+          <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="space-y-3 mb-4">
+            <p className="text-sm text-game-purple-deep leading-relaxed bg-pastel-yellow p-4 rounded-2xl border-2 border-card-outline/20">
+              {aiNarrative}
+            </p>
+            <p className="text-xs text-game-purple/40 italic">⚠ Advisor review required before use.</p>
+            <button
+              onClick={handleCopy}
+              className={cn(
+                'flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-bold transition-all border-2',
+                copied
+                  ? 'bg-game-mint border-game-mint text-[#065F46]'
+                  : 'bg-card-cream border-card-outline/40 text-game-text hover:border-card-outline'
+              )}
+            >
+              {copied ? <IconCheck size={13} /> : <IconCopy size={13} />}
+              {copied ? 'Copied!' : 'Copy Brief'}
+            </button>
+          </motion.div>
+        )}
+
+        <motion.button
+          onClick={handleGenerateAI}
+          disabled={aiStatus === 'loading'}
+          whileHover={aiStatus !== 'loading' ? { scale: 1.02 } : {}}
+          whileTap={aiStatus !== 'loading' ? { scale: 0.97 } : {}}
+          className={cn(
+            'w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold transition-all border-2',
+            aiStatus === 'loading'
+              ? 'bg-pastel-lavender border-card-outline/20 text-game-purple cursor-not-allowed'
+              : 'bg-game-purple border-game-purple text-white hover:opacity-90'
+          )}
+        >
+          {aiStatus === 'loading' ? (
+            <>
+              <IconLoader2 size={15} className="animate-spin" />
+              Generating with Gemini…
+            </>
+          ) : (
+            <>
+              <IconSparkles size={15} />
+              {aiStatus === 'success' ? 'Regenerate AI Brief' : 'Generate with Gemini AI ✨'}
+            </>
+          )}
+        </motion.button>
+      </div>
+
+      {/* Morning Summary (local logic) */}
       <div>
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-handwriting text-xl text-game-text">Morning Summary</h2>
@@ -150,7 +293,7 @@ export function SmartMorningBrief({ customers }: SmartMorningBriefProps) {
         <SectionHeader icon={IconListCheck} title="Recommended Priority List" count={brief.priorityList.length} color="bg-game-purple-deep" />
         <p className="text-xs text-game-purple/60 mb-3 flex items-center gap-1.5">
           <IconClock size={11} />
-          AI Suggested order · Advisor decides final action
+          Logic-driven order · Advisor decides final action
         </p>
         {brief.priorityList.length === 0 ? (
           <p className="text-sm text-game-purple text-center py-4">All clients are in good standing 🎉</p>
@@ -204,6 +347,12 @@ export function SmartMorningBrief({ customers }: SmartMorningBriefProps) {
             ))}
           </div>
         )}
+      </div>
+
+      {/* HP legend */}
+      <div className="flex items-center gap-1.5 text-xs text-game-purple/40">
+        <IconShield size={11} />
+        HP = Protection Health Points. Lapsed = 0. Critical ≤ 60d. Urgent &lt; 100d.
       </div>
     </div>
   );

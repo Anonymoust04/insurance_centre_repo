@@ -6,7 +6,13 @@ import {
   IconBrandWhatsapp,
   IconAlertTriangle,
   IconClock,
+  IconDeviceMobile,
+  IconDeviceDesktop,
 } from '@tabler/icons-react';
+
+function cleanPhone(phone: string): string {
+  return phone.replace(/\D/g, '');
+}
 import { cn } from '@/utils/cn';
 import type { MorningBriefItem } from '@/types/agent';
 
@@ -77,13 +83,22 @@ export function TodayPipeline({ items }: TodayPipelineProps) {
                   <IconPhone size={14} />
                 </a>
                 <a
-                  href={`https://wa.me/${item.phone.replace(/[\s\-\+()]/g, '')}`}
+                  href={`https://wa.me/${cleanPhone(item.phone)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-8 h-8 rounded-xl bg-game-pink-soft flex items-center justify-center text-game-pink hover:bg-game-pink hover:text-white transition-colors"
-                  title="WhatsApp"
+                  title="WhatsApp App"
                 >
-                  <IconBrandWhatsapp size={14} />
+                  <IconDeviceMobile size={14} />
+                </a>
+                <a
+                  href={`https://web.whatsapp.com/send?phone=${cleanPhone(item.phone)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-xl bg-game-mint flex items-center justify-center text-[#065F46] hover:bg-[#25D366] hover:text-white transition-colors"
+                  title="WhatsApp Web"
+                >
+                  <IconDeviceDesktop size={14} />
                 </a>
               </div>
             </motion.div>

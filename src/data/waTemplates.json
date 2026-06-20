@@ -1,0 +1,65 @@
+[
+  {
+    "id": "wt-001",
+    "category": "Follow-up",
+    "emoji": "👋",
+    "label": "Friendly Check-in",
+    "message": "Hi {name}! 😊 Just wanted to check in and see how you're doing. Is there anything about your coverage you'd like to chat about? I'm always happy to help — no rush at all!"
+  },
+  {
+    "id": "wt-002",
+    "category": "Follow-up",
+    "emoji": "🌟",
+    "label": "Long Time No See",
+    "message": "Hi {name}! It's been a while since we last caught up. I hope everything is going well with you and the family! 🙏 Just a friendly reminder that I'm always here if you have any questions about your policy or protection plan."
+  },
+  {
+    "id": "wt-003",
+    "category": "HP Warning",
+    "emoji": "⚡",
+    "label": "Gentle HP Reminder",
+    "message": "Hi {name}! 😊 I noticed your protection level has been running a little low lately. Nothing to worry about yet — but I'd love to have a quick 10-minute chat to review your coverage together. When are you free this week?"
+  },
+  {
+    "id": "wt-004",
+    "category": "HP Warning",
+    "emoji": "🚨",
+    "label": "Urgent Coverage Alert",
+    "message": "Hi {name}, I wanted to reach out personally because your protection coverage is at a critical level right now. I don't want you or your family to be caught without cover. Can we jump on a quick call today or tomorrow to sort this out together? 🙏"
+  },
+  {
+    "id": "wt-005",
+    "category": "Mission & Rewards",
+    "emoji": "🏆",
+    "label": "Mission Completed 🎉",
+    "message": "Hi {name}! Just saw that you completed your latest mission — amazing work! 🎉🏆 You're building such a strong protection foundation. Keep it up and I'll be in touch soon with some exciting updates for you!"
+  },
+  {
+    "id": "wt-006",
+    "category": "Mission & Rewards",
+    "emoji": "🎁",
+    "label": "Unclaimed Booster Reminder",
+    "message": "Hi {name}! 🎁 Quick heads-up — you have some unclaimed booster rewards waiting for you! These can help strengthen your protection plan. Let's chat soon so I can walk you through how to claim them. Won't take long, promise! 😄"
+  },
+  {
+    "id": "wt-007",
+    "category": "New Product",
+    "emoji": "🛡️",
+    "label": "Coverage Upgrade Suggestion",
+    "message": "Hi {name}! I've been reviewing your current protection plan and I think I've found something that would be a really great fit for you right now. 🛡️ It's quick to explain — got 10 minutes for a call this week? No pressure at all!"
+  },
+  {
+    "id": "wt-008",
+    "category": "Review",
+    "emoji": "📋",
+    "label": "Annual Review Invite",
+    "message": "Hi {name}! It's that time of the year — your annual policy review is coming up. 📋 A quick review helps make sure your coverage still matches your life situation. Can we schedule 20 minutes together soon? I'll make it easy and hassle-free, I promise! 😊"
+  },
+  {
+    "id": "wt-009",
+    "category": "Life Stage",
+    "emoji": "🌱",
+    "label": "Life Stage Check-in",
+    "message": "Hi {name}! 🌱 Life changes so fast, doesn't it? I just wanted to check in and see if anything has changed for you recently — new addition to the family, new job, house purchase? Big life moments usually mean it's a good time to review your protection. Let me know if you'd like to chat!"
+  }
+]
