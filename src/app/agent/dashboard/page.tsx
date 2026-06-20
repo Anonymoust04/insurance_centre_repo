@@ -2,11 +2,14 @@
 
 import agentsData from '@/data/getAgent.json';
 import profilesData from '@/data/getProfile.json';
-import type { AgentPerformance, CustomerProfile } from '@/types/agent';
+import briefData from '@/data/getMorningBrief.json';
+import type { AgentPerformance, CustomerProfile, MorningBriefItem } from '@/types/agent';
 import { AgentHeader } from '@/components/agent/AgentHeader';
 import { AgentStatCard } from '@/components/agent/AgentStatCard';
 import { AgentLeaderboardTable } from '@/components/agent/AgentLeaderboardTable';
 import { CustomerCard } from '@/components/agent/CustomerCard';
+import { MorningBrief } from '@/components/agent/MorningBrief';
+import { TodayPipeline } from '@/components/agent/TodayPipeline';
 import {
   IconFileCheck,
   IconCurrencyDollar,
@@ -19,6 +22,7 @@ import Link from 'next/link';
 
 const agents = agentsData as AgentPerformance[];
 const customers = profilesData as CustomerProfile[];
+const briefItems = briefData as MorningBriefItem[];
 
 // Simulating logged-in agent as Farah (rank 8) — agent-008
 const CURRENT_AGENT_ID = 'agent-008';
@@ -67,43 +71,57 @@ export default function AgentDashboardPage() {
           </div>
         </div>
 
-        {/* Stats grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <AgentStatCard
-            label="Policies Closed"
-            value={`${currentAgent.policiesClosed}`}
-            icon={IconFileCheck}
-            accent="blue"
-            trend="up"
-            trendValue="vs last month"
-            delay={0}
+        {/* Morning Brief */}
+        <div>
+          <MorningBrief
+            items={briefItems}
+            agentFirstName={currentAgent.fullName.split(' ')[0]}
+            generatedAt="8:02 AM"
           />
-          <AgentStatCard
-            label="Monthly Revenue"
-            value={`RM ${(currentAgent.monthlyRevenue / 1000).toFixed(0)}K`}
-            icon={IconCurrencyDollar}
-            accent="emerald"
-            trend="up"
-            trendValue="8.2%"
-            delay={0.06}
-          />
-          <AgentStatCard
-            label="Total Customers"
-            value={`${customers.length}`}
-            icon={IconUsers}
-            accent="violet"
-            subtext="Active policy holders"
-            delay={0.12}
-          />
-          <AgentStatCard
-            label="Conversion Rate"
-            value={`${currentAgent.conversionRate}%`}
-            icon={IconTargetArrow}
-            accent="amber"
-            trend="up"
-            trendValue="3%"
-            delay={0.18}
-          />
+        </div>
+
+        {/* Today's pipeline + stats side-by-side on large screens */}
+        <div className="grid lg:grid-cols-5 gap-6">
+          <div className="lg:col-span-3">
+            <TodayPipeline items={briefItems} />
+          </div>
+          <div className="lg:col-span-2 grid grid-cols-2 gap-4 content-start">
+            <AgentStatCard
+              label="Policies Closed"
+              value={`${currentAgent.policiesClosed}`}
+              icon={IconFileCheck}
+              accent="blue"
+              trend="up"
+              trendValue="vs last mo"
+              delay={0}
+            />
+            <AgentStatCard
+              label="Monthly Revenue"
+              value={`RM ${(currentAgent.monthlyRevenue / 1000).toFixed(0)}K`}
+              icon={IconCurrencyDollar}
+              accent="emerald"
+              trend="up"
+              trendValue="8.2%"
+              delay={0.06}
+            />
+            <AgentStatCard
+              label="Customers"
+              value={`${customers.length}`}
+              icon={IconUsers}
+              accent="violet"
+              subtext="Active holders"
+              delay={0.12}
+            />
+            <AgentStatCard
+              label="Conversion"
+              value={`${currentAgent.conversionRate}%`}
+              icon={IconTargetArrow}
+              accent="amber"
+              trend="up"
+              trendValue="3%"
+              delay={0.18}
+            />
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-5 gap-6">

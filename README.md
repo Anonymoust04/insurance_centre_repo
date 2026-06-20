@@ -34,6 +34,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `/agent/dashboard` | Agent dashboard (welcome, stats, mini leaderboard, customers) |
 | `/agent/dashboard/leaderboard` | Top 10 agent leaderboard with trophy podium |
 | `/agent/dashboard/customers` | Agent's customer list with policy details |
+| `/agent/dashboard/ai-tools` | 4 AI advisor productivity tools (mock logic, no real AI) |
 
 ## Project Structure
 
@@ -51,12 +52,16 @@ src/
 │           ├── layout.tsx               # Shared sidebar layout
 │           ├── page.tsx                 # Dashboard overview
 │           ├── leaderboard/page.tsx     # Top 10 agent leaderboard
-│           └── customers/page.tsx       # Customer management
+│           ├── customers/page.tsx       # Customer management
+│           └── ai-tools/page.tsx        # 4 AI advisor tools page
 ├── components/
 │   ├── agent/                           # AgentSidebar, AgentHeader, AgentStatCard,
-│   │                                    #   AgentLeaderboardCard, AgentLeaderboardTable,
-│   │                                    #   CustomerCard, CustomerStats,
-│   │                                    #   AgentLoginForm, MotivationalBanner
+│   │   │                                #   AgentLeaderboardCard, AgentLeaderboardTable,
+│   │   │                                #   CustomerCard, MorningBrief, TodayPipeline,
+│   │   │                                #   FollowUpModal, AgentLoginForm
+│   │   └── ai-tools/                    # AiToolCard, ClientSelect, SmartMorningBrief,
+│   │                                    #   FollowUpDraftGenerator, ProtectionGapExplainer,
+│   │                                    #   MeetingPrepCard
 │   ├── auth/                            # AuthCard, LoginForm, SignupForm
 │   ├── layout/                          # Navbar, Footer
 │   ├── sections/                        # HeroSection, PlansSection, WhyChooseSection,
@@ -65,10 +70,13 @@ src/
 ├── data/
 │   ├── insurance.ts                     # Homepage content (nav, plans, stats, testimonials)
 │   ├── getAgent.json                    # 10 agent performance records
-│   └── getProfile.json                  # Customer profile records
+│   ├── getProfile.json                  # 12 customer profiles with AI fields
+│   └── getMorningBrief.json             # Pre-generated morning brief items
+├── lib/
+│   └── aiAdvisorLogic.ts                # Pure TS logic for all 4 AI advisor tools
 ├── types/
 │   ├── index.ts                         # Shared TypeScript interfaces
-│   └── agent.ts                         # AgentPerformance, CustomerProfile interfaces
+│   └── agent.ts                         # AgentPerformance, CustomerProfile, AI output types
 └── utils/
     └── cn.ts                            # Class merging utility
 ```
@@ -91,6 +99,19 @@ Login and Signup are UI-only — no backend. Both include:
 - Show/hide password toggle
 - Inline error messages
 - Terms & privacy checkbox (signup)
+
+## AI Advisor Tools (`/agent/dashboard/ai-tools`)
+
+4 mock-AI productivity tools powered by pure TypeScript logic over local JSON data. No real AI model is called.
+
+| Tool | Description |
+|---|---|
+| **Smart Morning Brief** | Ranks all clients by urgency score (lapsed +40, critical HP +50, urgent HP +30, follow-up due +20, missing CI +15). Shows 4 sections: summary pills, urgent clients, recent activity feed, priority list. |
+| **Follow-up Draft Generator** | Select a client + tone (warm/professional/friendly) → generates 3 editable WhatsApp draft options. Copy Draft or Open WhatsApp Manually. Never auto-sends. |
+| **Protection Gap Explainer** | Reads `coverageDeck` and `missingCoverage` fields. Shows covered areas (green), gaps with risk impact (red/amber), talking points for client conversations, and a recommended next product. |
+| **Meeting Prep Card** | One-page brief: life stage, HP status, energy type, unclaimed boosters, coverage summary, key insights, suggested conversation opener. Print, Copy Opener, Mark as Prepared buttons. |
+
+All outputs are labelled **"AI Suggested"** and require advisor review before any action is taken.
 
 ## Dark Mode
 

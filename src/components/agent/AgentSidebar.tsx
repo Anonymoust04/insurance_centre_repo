@@ -10,6 +10,7 @@ import {
   IconUserCircle,
   IconLogout,
   IconShield,
+  IconSparkles,
 } from '@tabler/icons-react';
 import { cn } from '@/utils/cn';
 
@@ -17,6 +18,7 @@ const navItems = [
   { label: 'Dashboard', href: '/agent/dashboard', icon: IconLayoutDashboard },
   { label: 'Leaderboard', href: '/agent/dashboard/leaderboard', icon: IconTrophy },
   { label: 'Customers', href: '/agent/dashboard/customers', icon: IconUsers },
+  { label: 'AI Tools', href: '/agent/dashboard/ai-tools', icon: IconSparkles },
   { label: 'Sales Performance', href: '/agent/dashboard/sales', icon: IconChartBar },
   { label: 'Profile', href: '/agent/dashboard/profile', icon: IconUserCircle },
 ];
