@@ -193,7 +193,7 @@ export function UploadPanel({
       formData.append('photo', selectedFile);
 
       const response = await fetch(
-        'http://localhost:4000/api/generate-portrait',
+        '/api/generate-portrait',
         {
           method: 'POST',
           body: formData,
@@ -201,7 +201,8 @@ export function UploadPanel({
       );
 
       if (!response.ok) {
-        throw new Error('Failed to generate portrait');
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || 'Failed to generate portrait');
       }
 
       const blob = await response.blob();
@@ -214,7 +215,7 @@ export function UploadPanel({
       console.error(error);
 
       alert(
-        'Failed to generate portrait. Check backend logs.'
+        error instanceof Error ? error.message : 'Failed to generate portrait. Please try again.'
       );
     } finally {
       setIsGenerating(false);
