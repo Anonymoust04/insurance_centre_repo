@@ -9,64 +9,86 @@ import {
   IconChartBar,
   IconUserCircle,
   IconLogout,
-  IconShield,
+  IconBolt,
   IconSparkles,
+  IconSettings,
 } from '@tabler/icons-react';
 import { cn } from '@/utils/cn';
 
 const navItems = [
   { label: 'Dashboard', href: '/agent/dashboard', icon: IconLayoutDashboard },
+  { label: 'AI Tools', href: '/agent/dashboard/ai-tools', icon: IconSparkles, badge: 'New' },
   { label: 'Leaderboard', href: '/agent/dashboard/leaderboard', icon: IconTrophy },
   { label: 'Customers', href: '/agent/dashboard/customers', icon: IconUsers },
-  { label: 'AI Tools', href: '/agent/dashboard/ai-tools', icon: IconSparkles },
   { label: 'Sales Performance', href: '/agent/dashboard/sales', icon: IconChartBar },
   { label: 'Profile', href: '/agent/dashboard/profile', icon: IconUserCircle },
+  { label: 'Settings', href: '/agent/dashboard/settings', icon: IconSettings },
 ];
 
 export function AgentSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 min-h-screen bg-slate-900 dark:bg-slate-950 flex flex-col shrink-0">
-      <div className="px-6 py-5 border-b border-slate-700/60">
+    <aside className="w-60 min-h-screen bg-game-yellow border-r-2 border-card-outline flex flex-col shrink-0">
+      {/* Brand */}
+      <div className="px-5 py-5 border-b-2 border-card-outline/20">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
-            <IconShield size={18} className="text-white" />
+          <div className="w-9 h-9 rounded-full bg-game-purple flex items-center justify-center shadow-sm">
+            <IconBolt size={18} className="text-white" />
           </div>
-          <div>
-            <p className="text-white font-bold text-sm leading-none">SecureLife</p>
-            <p className="text-slate-400 text-xs mt-0.5">Agent Portal</p>
+          <div className="leading-none">
+            <span className="font-handwriting text-game-text text-xl">Insurance </span>
+            <span className="font-handwriting text-game-purple text-xl italic">Center</span>
           </div>
         </Link>
       </div>
 
+      {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {navItems.map(({ label, href, icon: Icon }) => {
+        {navItems.map(({ label, href, icon: Icon, badge }) => {
           const isActive = pathname === href || (href !== '/agent/dashboard' && pathname.startsWith(href));
           return (
             <Link
               key={href}
               href={href}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
+                'flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold transition-all duration-150',
                 isActive
-                  ? 'bg-blue-600 text-white'
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                  ? 'bg-game-pink-soft border-2 border-card-outline text-game-text shadow-sm'
+                  : 'text-game-purple-deep hover:bg-pastel-lavender/60 border-2 border-transparent'
               )}
             >
-              <Icon size={18} stroke={isActive ? 2 : 1.5} />
-              {label}
+              <Icon size={18} stroke={isActive ? 2 : 1.8} className={isActive ? 'text-game-purple' : 'text-game-purple'} />
+              <span className="flex-1">{label}</span>
+              {badge && (
+                <span className="text-xs font-bold bg-game-pink text-white px-2 py-0.5 rounded-full">{badge}</span>
+              )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="px-3 pb-4 border-t border-slate-700/60 pt-3">
+      {/* Motivational card */}
+      <div className="mx-3 mb-3 p-4 bg-pastel-lavender border-2 border-card-outline/40 rounded-3xl">
+        <div className="flex items-center gap-1.5 mb-2">
+          <span className="text-sm">✨</span>
+          <p className="text-xs font-bold text-game-text font-handwriting text-base">You're doing great!</p>
+        </div>
+        <p className="text-xs text-game-purple-deep leading-relaxed mb-3">
+          Keep helping more families build their protection.
+        </p>
+        <div className="flex justify-center">
+          <span className="text-3xl">🏆</span>
+        </div>
+      </div>
+
+      {/* Logout */}
+      <div className="px-3 pb-4 border-t-2 border-card-outline/20 pt-3">
         <Link
           href="/agent/login"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-red-900/30 hover:text-red-400 transition-all duration-150"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-game-purple border-2 border-transparent hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all duration-150"
         >
-          <IconLogout size={18} stroke={1.5} />
+          <IconLogout size={18} stroke={1.8} />
           Logout
         </Link>
       </div>

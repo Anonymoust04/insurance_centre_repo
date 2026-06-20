@@ -14,7 +14,7 @@ export default function CustomersPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <AgentHeader
-        title="My Customers"
+        title="👥 My Customers"
         subtitle={`${customers.length} policy holders under your management`}
       />
 
@@ -28,14 +28,14 @@ export default function CustomersPage() {
 
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-slate-900 dark:text-white">All Customers</h2>
-            <span className="text-xs text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
+            <h2 className="font-handwriting text-xl text-game-text">All Customers</h2>
+            <span className="text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1 rounded-full">
               {customers.length} total
             </span>
           </div>
           <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
             {customers.map((customer, i) => (
-              <CustomerCard key={customer.id} customer={customer} delay={i * 0.05} />
+              <CustomerCard key={customer.id} customer={customer} delay={i * 0.04} />
             ))}
           </div>
         </div>

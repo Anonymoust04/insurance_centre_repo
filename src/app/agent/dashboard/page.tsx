@@ -14,170 +14,305 @@ import {
   IconFileCheck,
   IconCurrencyDollar,
   IconUsers,
-  IconTrophy,
-  IconTargetArrow,
+  IconMedal,
   IconArrowRight,
+  IconTrophy,
+  IconSparkles,
 } from '@tabler/icons-react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 const agents = agentsData as AgentPerformance[];
 const customers = profilesData as CustomerProfile[];
 const briefItems = briefData as MorningBriefItem[];
 
-// Simulating logged-in agent as Farah (rank 8) — agent-008
 const CURRENT_AGENT_ID = 'agent-008';
 const currentAgent = agents.find(a => a.id === CURRENT_AGENT_ID)!;
-const topAgent = agents[0];
+const top5 = agents.slice(0, 5);
 const policiesToTop5 = Math.max(0, agents[4].policiesClosed - currentAgent.policiesClosed + 1);
 
+const rankEmojiMap: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
+
 export default function AgentDashboardPage() {
+  const firstName = currentAgent.fullName.split(' ')[0];
+  const totalRevenue = agents.reduce((s, a) => s + a.monthlyRevenue, 0);
+
   return (
     <div className="flex flex-col min-h-screen">
       <AgentHeader
-        title={`Good morning, ${currentAgent.fullName.split(' ')[0]} 👋`}
-        subtitle={`${new Date().toLocaleDateString('en-MY', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}`}
+        title={`Hello, Agent ${firstName}! 👋`}
+        subtitle="Here's your dashboard overview for today."
       />
 
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
-        {/* Motivational rank card */}
-        <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-5 text-white shadow-md shadow-blue-200 dark:shadow-blue-900/30">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-200 text-xs font-medium uppercase tracking-wider">Your ranking</p>
-              <p className="text-3xl font-bold mt-1">
-                #{currentAgent.rank} <span className="text-blue-300 text-base font-medium">of {agents.length}</span>
-              </p>
-              <p className="text-blue-100 text-sm mt-2">
-                Close <span className="font-bold text-white">{policiesToTop5} more {policiesToTop5 === 1 ? 'policy' : 'policies'}</span> to break into the Top 5.
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-blue-200 text-xs">This month</p>
-              <p className="text-2xl font-bold">{currentAgent.policiesClosed}</p>
-              <p className="text-blue-200 text-xs">policies closed</p>
-            </div>
-          </div>
-          <div className="mt-4">
-            <div className="flex items-center justify-between text-xs text-blue-200 mb-1">
-              <span>Monthly target progress</span>
-              <span>{currentAgent.targetAchievement}%</span>
-            </div>
-            <div className="h-2 bg-blue-800/60 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-white/90 rounded-full transition-all"
-                style={{ width: `${Math.min(currentAgent.targetAchievement, 100)}%` }}
-              />
-            </div>
-          </div>
-        </div>
 
-        {/* Morning Brief */}
-        <div>
-          <MorningBrief
-            items={briefItems}
-            agentFirstName={currentAgent.fullName.split(' ')[0]}
-            generatedAt="8:02 AM"
+        {/* KPI stat cards */}
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+          <AgentStatCard
+            label="My Rank"
+            value={`#${currentAgent.rank}`}
+            icon={IconMedal}
+            accent="pink"
+            subtext="↑ 2 from last month"
+            delay={0}
+          />
+          <AgentStatCard
+            label="Policies Closed"
+            value={`${currentAgent.policiesClosed}`}
+            icon={IconFileCheck}
+            accent="peach"
+            subtext="This Month"
+            delay={0.06}
+          />
+          <AgentStatCard
+            label="Total Revenue"
+            value={`RM ${(currentAgent.monthlyRevenue / 1000).toFixed(0)},${String(currentAgent.monthlyRevenue).slice(-3)}`}
+            icon={IconCurrencyDollar}
+            accent="mint"
+            subtext="This Month"
+            delay={0.12}
+          />
+          <AgentStatCard
+            label="Total Customers"
+            value={`${customers.length}`}
+            icon={IconUsers}
+            accent="lavender"
+            subtext="Active Clients"
+            delay={0.18}
           />
         </div>
 
-        {/* Today's pipeline + stats side-by-side on large screens */}
-        <div className="grid lg:grid-cols-5 gap-6">
-          <div className="lg:col-span-3">
-            <TodayPipeline items={briefItems} />
+        {/* Main 3-col grid */}
+        <div className="grid xl:grid-cols-3 gap-6">
+
+          {/* Top 5 Agents */}
+          <div className="bg-card-cream rounded-3xl p-5 border-2 border-card-outline/60 shadow-[0_4px_20px_rgba(107,33,217,0.10)]">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-handwriting text-xl text-game-text">Top 5 Agents This Month</h2>
+              <Link href="/agent/dashboard/leaderboard" className="flex items-center gap-1 text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full hover:bg-game-purple hover:text-white transition-colors">
+                View Leaderboard
+              </Link>
+            </div>
+
+            <div className="space-y-2">
+              {top5.map((agent, i) => (
+                <motion.div
+                  key={agent.id}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.06 }}
+                  className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-pastel-yellow/60 transition-colors"
+                >
+                  {/* Rank circle */}
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-sm shrink-0 font-bold ${
+                    agent.rank === 1 ? 'bg-[#FFD700]' :
+                    agent.rank === 2 ? 'bg-[#C0C0C0]' :
+                    agent.rank === 3 ? 'bg-[#CD7F32] text-white' :
+                    'bg-pastel-lavender text-game-purple'
+                  }`}>
+                    {agent.rank <= 3 ? rankEmojiMap[agent.rank] : agent.rank}
+                  </div>
+
+                  {/* Avatar */}
+                  <div className="w-8 h-8 rounded-full bg-game-purple border-2 border-card-outline/40 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                    {agent.avatar}
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-game-text truncate">{agent.fullName}</p>
+                    <p className="text-xs text-game-purple/60 truncate">{agent.branch}</p>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="text-right shrink-0">
+                    <p className="text-xs font-bold text-game-text">{agent.policiesClosed}</p>
+                    <p className="text-xs text-game-purple/60">Policies</p>
+                  </div>
+                  <div className="text-right shrink-0 w-16">
+                    <p className="text-xs font-bold text-game-purple">RM {(agent.monthlyRevenue / 1000).toFixed(0)}K</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Motivational banner */}
+            <div className="mt-4 flex items-center gap-3 bg-pastel-yellow rounded-2xl px-4 py-3 border border-card-outline/20">
+              <span className="text-xl shrink-0">⭐</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-game-text">You are currently ranked #{currentAgent.rank}.</p>
+                <p className="text-xs text-game-purple">Close {policiesToTop5} more policies to reach the top 5!</p>
+              </div>
+              <span className="text-xl shrink-0">🚀</span>
+            </div>
           </div>
-          <div className="lg:col-span-2 grid grid-cols-2 gap-4 content-start">
-            <AgentStatCard
-              label="Policies Closed"
-              value={`${currentAgent.policiesClosed}`}
-              icon={IconFileCheck}
-              accent="blue"
-              trend="up"
-              trendValue="vs last mo"
-              delay={0}
-            />
-            <AgentStatCard
-              label="Monthly Revenue"
-              value={`RM ${(currentAgent.monthlyRevenue / 1000).toFixed(0)}K`}
-              icon={IconCurrencyDollar}
-              accent="emerald"
-              trend="up"
-              trendValue="8.2%"
-              delay={0.06}
-            />
-            <AgentStatCard
-              label="Customers"
-              value={`${customers.length}`}
-              icon={IconUsers}
-              accent="violet"
-              subtext="Active holders"
-              delay={0.12}
-            />
-            <AgentStatCard
-              label="Conversion"
-              value={`${currentAgent.conversionRate}%`}
-              icon={IconTargetArrow}
-              accent="amber"
-              trend="up"
-              trendValue="3%"
-              delay={0.18}
-            />
+
+          {/* AI Morning Brief */}
+          <div className="bg-card-cream rounded-3xl p-5 border-2 border-card-outline/60 shadow-[0_4px_20px_rgba(107,33,217,0.10)]">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-handwriting text-xl text-game-text">AI Morning Brief</h2>
+              <Link href="/agent/dashboard/ai-tools" className="text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full hover:bg-game-purple hover:text-white transition-colors">
+                View All
+              </Link>
+            </div>
+            <div className="space-y-2 mb-4">
+              {briefItems.slice(0, 4).map((item, i) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.07 }}
+                  className="flex items-start gap-3 p-3 rounded-2xl hover:bg-pastel-yellow/60 transition-colors cursor-pointer"
+                >
+                  <div className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 ${
+                    item.type === 'urgency' ? 'bg-red-100' :
+                    item.type === 'milestone' ? 'bg-[#FFF9C4]' :
+                    'bg-pastel-lavender'
+                  }`}>
+                    <span className="text-base">{item.type === 'urgency' ? '⚠️' : item.type === 'milestone' ? '⭐' : '👶'}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-game-text leading-snug">{item.insight}</p>
+                    <p className="text-xs text-game-purple/60 mt-0.5">{item.detail}</p>
+                  </div>
+                  <IconArrowRight size={14} className="text-game-purple/40 shrink-0 mt-1" />
+                </motion.div>
+              ))}
+            </div>
+            <Link
+              href="/agent/dashboard/ai-tools"
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl border-2 border-card-outline/60 text-game-text font-bold text-sm hover:bg-pastel-lavender transition-colors"
+            >
+              <IconSparkles size={15} className="text-game-purple" />
+              Go to AI Tools
+            </Link>
+          </div>
+
+          {/* Recent Customers */}
+          <div className="bg-card-cream rounded-3xl p-5 border-2 border-card-outline/60 shadow-[0_4px_20px_rgba(107,33,217,0.10)]">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-handwriting text-xl text-game-text">Recent Customers</h2>
+              <Link href="/agent/dashboard/customers" className="text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full hover:bg-game-purple hover:text-white transition-colors">
+                View All
+              </Link>
+            </div>
+            <div className="space-y-2">
+              {customers.slice(0, 5).map((c, i) => {
+                const hp = c.protectionHpDays ?? c.hpDays;
+                const isUrgent = hp > 0 && hp < 100;
+                const isLapsed = hp === 0;
+                return (
+                  <motion.div
+                    key={c.id}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.06 }}
+                    className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-pastel-yellow/60 transition-colors"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-game-purple border-2 border-card-outline/40 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                      {c.avatar}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-game-text truncate">{c.fullName}</p>
+                      <p className="text-xs text-game-purple/60">HP: {isLapsed ? 'Lapsed' : `${hp} days`}</p>
+                    </div>
+                    <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full shrink-0 ${
+                      isLapsed ? 'bg-red-100 text-red-600' :
+                      isUrgent ? 'bg-game-pink-soft text-game-pink' :
+                      'bg-game-mint text-[#065F46]'
+                    }`}>
+                      {isLapsed ? '⚠ Lapsed' : isUrgent ? 'Urgent' : 'Good'}
+                    </span>
+                    <IconArrowRight size={14} className="text-game-purple/40 shrink-0" />
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-5 gap-6">
-          {/* Mini leaderboard */}
-          <div className="lg:col-span-3 space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                <IconTrophy size={16} className="text-amber-500" />
-                Top Agents This Month
+        {/* Morning Brief + Pipeline row */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-semibold text-game-text flex items-center gap-2 text-sm">
+                <IconSparkles size={15} className="text-game-purple" />
+                Detailed Morning Brief
               </h2>
-              <Link href="/agent/dashboard/leaderboard" className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium">
-                Full leaderboard <IconArrowRight size={13} />
-              </Link>
+            </div>
+            <MorningBrief items={briefItems} agentFirstName={firstName} generatedAt="8:02 AM" />
+          </div>
+          <div>
+            <TodayPipeline items={briefItems} />
+          </div>
+        </div>
+
+        {/* Bottom panels */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Sales Performance placeholder */}
+          <div className="bg-card-cream rounded-3xl p-5 border-2 border-card-outline/60 shadow-[0_4px_16px_rgba(107,33,217,0.08)]">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-handwriting text-xl text-game-text flex items-center gap-2">
+                <IconTrophy size={18} className="text-[#FFD700]" />
+                Sales Performance
+              </h2>
+              <span className="text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full">This Month</span>
             </div>
             <AgentLeaderboardTable agents={agents} currentAgentId={CURRENT_AGENT_ID} showAll={false} />
           </div>
 
-          {/* Top agent spotlight */}
-          <div className="lg:col-span-2">
-            <h2 className="font-semibold text-slate-900 dark:text-white mb-3">Top Agent Spotlight</h2>
-            <div className="bg-gradient-to-br from-amber-50 to-white dark:from-amber-900/10 dark:to-slate-800 rounded-2xl p-5 border border-amber-100 dark:border-amber-800/30 h-full">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center text-white font-bold text-sm">
-                  {topAgent.avatar}
-                </div>
-                <div>
-                  <p className="font-bold text-slate-900 dark:text-white text-sm">{topAgent.fullName}</p>
-                  <p className="text-xs text-slate-500">{topAgent.branch}</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { label: 'Policies', value: `${topAgent.policiesClosed}` },
-                  { label: 'Revenue', value: `RM ${(topAgent.monthlyRevenue / 1000).toFixed(0)}K` },
-                  { label: 'Conversion', value: `${topAgent.conversionRate}%` },
-                  { label: 'Target', value: `${topAgent.targetAchievement}%` },
-                ].map(({ label, value }) => (
-                  <div key={label} className="bg-white/70 dark:bg-slate-700/40 rounded-xl p-3">
-                    <p className="text-xs text-slate-400">{label}</p>
-                    <p className="text-sm font-bold text-slate-900 dark:text-white">{value}</p>
-                  </div>
-                ))}
-              </div>
+          {/* Upcoming Follow-ups */}
+          <div className="bg-card-cream rounded-3xl p-5 border-2 border-card-outline/60 shadow-[0_4px_16px_rgba(107,33,217,0.08)]">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-handwriting text-xl text-game-text">Upcoming Follow-ups</h2>
+              <Link href="/agent/dashboard/customers" className="text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full hover:bg-game-purple hover:text-white transition-colors">
+                View Calendar
+              </Link>
+            </div>
+            <div className="space-y-2">
+              {customers
+                .filter(c => c.nextFollowUpDate)
+                .sort((a, b) => new Date(a.nextFollowUpDate!).getTime() - new Date(b.nextFollowUpDate!).getTime())
+                .slice(0, 5)
+                .map((c, i) => {
+                  const daysLeft = Math.round((new Date(c.nextFollowUpDate!).getTime() - new Date('2026-06-20').getTime()) / (1000 * 60 * 60 * 24));
+                  const isDue = daysLeft <= 3;
+                  return (
+                    <motion.div
+                      key={c.id}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.06 }}
+                      className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-pastel-yellow/60 transition-colors"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-game-purple border-2 border-card-outline/40 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                        {c.avatar}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-game-text truncate">{c.fullName}</p>
+                        <p className="text-xs text-game-purple/60">{c.nextFollowUpDate}</p>
+                      </div>
+                      <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full shrink-0 ${
+                        isDue ? 'bg-game-pink-soft text-game-pink' : 'bg-pastel-lavender text-game-purple'
+                      }`}>
+                        {daysLeft <= 0 ? 'Today!' : `${daysLeft}d`}
+                      </span>
+                    </motion.div>
+                  );
+                })}
             </div>
           </div>
         </div>
 
         {/* Customer preview */}
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-              <IconUsers size={16} className="text-blue-500" />
-              Recent Customers
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-handwriting text-xl text-game-text flex items-center gap-2">
+              <IconUsers size={18} className="text-game-purple" />
+              All Customers
             </h2>
-            <Link href="/agent/dashboard/customers" className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium">
-              All customers <IconArrowRight size={13} />
+            <Link href="/agent/dashboard/customers" className="flex items-center gap-1 text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full hover:bg-game-purple hover:text-white transition-colors">
+              All customers <IconArrowRight size={12} />
             </Link>
           </div>
           <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">

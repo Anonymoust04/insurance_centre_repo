@@ -11,9 +11,9 @@ import { ProtectionGapExplainer } from '@/components/agent/ai-tools/ProtectionGa
 import { MeetingPrepCard } from '@/components/agent/ai-tools/MeetingPrepCard';
 import {
   IconSunHigh,
-  IconMessageDots,
-  IconShieldHalf,
-  IconClipboardList,
+  IconMessage2,
+  IconShieldSearch,
+  IconClipboardText,
   IconSparkles,
 } from '@tabler/icons-react';
 
@@ -26,25 +26,25 @@ const tools: { id: ToolId; icon: React.ElementType; title: string; description: 
     id: 'morning-brief',
     icon: IconSunHigh,
     title: 'Smart Morning Brief',
-    description: 'AI-ranked list of urgent clients, follow-ups due, and activity feed for your day.',
+    description: 'AI-ranked urgent clients, follow-ups, and today\'s activity feed.',
   },
   {
     id: 'followup-draft',
-    icon: IconMessageDots,
+    icon: IconMessage2,
     title: 'Follow-up Draft Generator',
     description: 'Generate 3 WhatsApp draft options in warm, professional, or friendly tone.',
   },
   {
     id: 'protection-gap',
-    icon: IconShieldHalf,
+    icon: IconShieldSearch,
     title: 'Protection Gap Explainer',
-    description: 'See covered areas vs gaps, risk impact, talking points, and next recommendation.',
+    description: 'Covered areas vs gaps, risk impact, talking points, next recommendation.',
   },
   {
     id: 'meeting-prep',
-    icon: IconClipboardList,
+    icon: IconClipboardText,
     title: 'Meeting Prep Card',
-    description: 'One-page brief with life stage, HP status, boosters, coverage, and a conversation opener.',
+    description: 'One-page brief: life stage, HP, boosters, coverage, conversation opener.',
   },
 ];
 
@@ -53,14 +53,10 @@ export default function AiToolsPage() {
 
   const renderTool = () => {
     switch (activeTool) {
-      case 'morning-brief':
-        return <SmartMorningBrief customers={customers} />;
-      case 'followup-draft':
-        return <FollowUpDraftGenerator customers={customers} />;
-      case 'protection-gap':
-        return <ProtectionGapExplainer customers={customers} />;
-      case 'meeting-prep':
-        return <MeetingPrepCard customers={customers} />;
+      case 'morning-brief': return <SmartMorningBrief customers={customers} />;
+      case 'followup-draft': return <FollowUpDraftGenerator customers={customers} />;
+      case 'protection-gap': return <ProtectionGapExplainer customers={customers} />;
+      case 'meeting-prep': return <MeetingPrepCard customers={customers} />;
     }
   };
 
@@ -69,29 +65,29 @@ export default function AiToolsPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <AgentHeader
-        title="AI Advisor Tools"
-        subtitle="Mock AI productivity tools — logic-driven, no real AI model"
+        title="✨ AI Advisor Tools"
+        subtitle="Mock AI productivity tools — logic-driven from your local customer data"
       />
 
       <main className="flex-1 p-6 overflow-y-auto">
-        {/* Page intro */}
-        <div className="flex items-start gap-3 p-4 mb-6 bg-gradient-to-r from-violet-50 to-blue-50 dark:from-violet-900/10 dark:to-blue-900/10 rounded-2xl border border-violet-100 dark:border-violet-800/30">
-          <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shrink-0">
-            <IconSparkles size={18} className="text-white" />
+        {/* Intro banner */}
+        <div className="flex items-start gap-3 p-4 mb-6 bg-card-cream rounded-3xl border-2 border-card-outline/60 shadow-[0_4px_16px_rgba(107,33,217,0.08)]">
+          <div className="w-10 h-10 rounded-2xl bg-game-purple flex items-center justify-center shrink-0">
+            <IconSparkles size={20} className="text-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-slate-900 dark:text-white">4 AI-Powered Advisor Tools</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              All insights are generated from your local customer data. No real AI model is called.
-              Labels marked <span className="font-semibold text-violet-600 dark:text-violet-400">&ldquo;AI Suggested&rdquo;</span> are advisor-reviewed — you decide every action.
+            <p className="text-sm font-bold text-game-text">Mock AI Preview — 4 Advisor Productivity Tools</p>
+            <p className="text-xs text-game-purple mt-0.5">
+              Generated from local customer JSON. Advisor reviews before taking action.
+              Items labelled <span className="font-bold text-game-pink">&ldquo;AI Suggested&rdquo;</span> require your review — you decide every action.
             </p>
           </div>
         </div>
 
         <div className="grid lg:grid-cols-4 gap-6">
-          {/* Tool selector — left sidebar on large screens */}
+          {/* Tool selector */}
           <div className="lg:col-span-1 space-y-2">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-1 mb-3">Tools</p>
+            <p className="text-xs font-bold text-game-purple uppercase tracking-wider px-1 mb-3">Choose a Tool</p>
             {tools.map((tool, i) => (
               <AiToolCard
                 key={tool.id}
@@ -109,10 +105,10 @@ export default function AiToolsPage() {
           {/* Active tool panel */}
           <div className="lg:col-span-3">
             <div className="flex items-center gap-2 mb-5">
-              <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center">
-                <active.icon size={14} className="text-white" />
+              <div className="w-8 h-8 rounded-2xl bg-game-purple flex items-center justify-center">
+                <active.icon size={16} className="text-white" />
               </div>
-              <h2 className="text-base font-bold text-slate-900 dark:text-white">{active.title}</h2>
+              <h2 className="font-handwriting text-xl text-game-text">{active.title}</h2>
             </div>
             {renderTool()}
           </div>

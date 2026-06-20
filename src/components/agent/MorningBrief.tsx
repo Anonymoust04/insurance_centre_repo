@@ -33,44 +33,45 @@ const typeConfig = {
   urgency: {
     Icon: IconAlertTriangle,
     iconClass: 'text-red-500',
-    badgeClass: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+    badgeClass: 'bg-red-100 text-red-700',
     borderClass: 'border-l-red-400',
-    avatarRing: 'ring-2 ring-red-400',
+    avatarBg: 'bg-red-100',
   },
   milestone: {
     Icon: IconTrophy,
-    iconClass: 'text-amber-500',
-    badgeClass: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
-    borderClass: 'border-l-amber-400',
-    avatarRing: 'ring-2 ring-amber-400',
+    iconClass: 'text-[#FFD700]',
+    badgeClass: 'bg-[#FFF9C4] text-[#7A4F00]',
+    borderClass: 'border-l-[#FFD700]',
+    avatarBg: 'bg-[#FFF9C4]',
   },
   'life-stage': {
     Icon: IconBabyCarriage,
-    iconClass: 'text-violet-500',
-    badgeClass: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400',
-    borderClass: 'border-l-violet-400',
-    avatarRing: 'ring-2 ring-violet-400',
+    iconClass: 'text-game-purple',
+    badgeClass: 'bg-pastel-lavender text-game-purple-deep',
+    borderClass: 'border-l-game-purple',
+    avatarBg: 'bg-pastel-lavender',
   },
 };
 
 const actionConfig = {
-  call: { label: 'Call now', Icon: IconPhone, className: 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30' },
-  whatsapp: { label: 'Draft message', Icon: IconBrandWhatsapp, className: 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30' },
-  review: { label: 'Schedule review', Icon: IconCalendarEvent, className: 'text-violet-700 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/20 hover:bg-violet-100 dark:hover:bg-violet-900/30' },
-  congratulate: { label: 'Send congrats', Icon: IconBrandWhatsapp, className: 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/30' },
+  call: { label: 'Call now', Icon: IconPhone, className: 'text-game-purple bg-pastel-lavender hover:bg-game-purple hover:text-white' },
+  whatsapp: { label: 'Draft message', Icon: IconBrandWhatsapp, className: 'text-game-pink bg-game-pink-soft hover:bg-game-pink hover:text-white' },
+  review: { label: 'Schedule review', Icon: IconCalendarEvent, className: 'text-game-purple bg-pastel-lavender hover:bg-game-purple hover:text-white' },
+  congratulate: { label: 'Send congrats', Icon: IconBrandWhatsapp, className: 'text-[#7A4F00] bg-[#FFF9C4] hover:bg-[#FFD700] hover:text-white' },
 };
 
 function HpBar({ hpDays }: { hpDays: number }) {
   const max = 365;
   const pct = Math.min(Math.max(hpDays, 0), max) / max * 100;
-  const color = hpDays <= 0 ? 'bg-red-500' : hpDays < 100 ? 'bg-amber-500' : 'bg-emerald-500';
+  const color = hpDays <= 0 ? 'bg-red-500' : hpDays < 100 ? 'bg-game-pink' : 'bg-game-mint';
   const label = hpDays <= 0 ? 'Lapsed' : `${hpDays}d HP`;
+  const track = hpDays <= 0 ? 'bg-red-100' : hpDays < 100 ? 'bg-game-pink-soft' : 'bg-game-mint/30';
   return (
     <div className="flex items-center gap-2">
-      <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+      <div className={cn('flex-1 h-2 rounded-full overflow-hidden', track)}>
         <div className={cn('h-full rounded-full transition-all', color)} style={{ width: `${pct}%` }} />
       </div>
-      <span className={cn('text-xs font-semibold shrink-0', hpDays <= 0 ? 'text-red-600 dark:text-red-400' : hpDays < 100 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400')}>
+      <span className={cn('text-xs font-bold shrink-0', hpDays <= 0 ? 'text-red-600' : hpDays < 100 ? 'text-game-pink' : 'text-[#065F46]')}>
         {label}
       </span>
     </div>
@@ -79,7 +80,7 @@ function HpBar({ hpDays }: { hpDays: number }) {
 
 function ConfidencePip({ score }: { score: number }) {
   return (
-    <div className="flex items-center gap-1 text-xs text-slate-400">
+    <div className="flex items-center gap-1 text-xs text-game-purple/60">
       <IconTargetArrow size={11} />
       <span>{score}% confidence</span>
     </div>
@@ -112,35 +113,33 @@ function BriefCard({
       animate={{ opacity: done ? 0 : 1, x: done ? 20 : 0 }}
       transition={{ duration: done ? 0.3 : 0.3, delay: done ? 0 : index * 0.06 }}
       className={cn(
-        'bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700/50 border-l-4 shadow-sm',
+        'bg-card-cream rounded-2xl border-2 border-card-outline/40 border-l-4 shadow-sm',
         config.borderClass
       )}
     >
       <div className="px-4 pt-3.5 pb-3">
-        {/* Row 1: avatar + name + tags + dismiss */}
         <div className="flex items-start gap-3">
           <div className={cn(
-            'w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5',
-            'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300',
-            config.avatarRing
+            'w-9 h-9 rounded-2xl flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 border-2 border-card-outline/30',
+            config.avatarBg, 'text-game-text'
           )}>
             {item.clientAvatar}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-sm font-bold text-slate-900 dark:text-white">{item.clientName}</span>
-              <span className={cn('inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full', config.badgeClass)}>
+              <span className="text-sm font-bold text-game-text">{item.clientName}</span>
+              <span className={cn('inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full', config.badgeClass)}>
                 <config.Icon size={10} />
                 {item.tag}
               </span>
               {item.priority === 'high' && (
-                <span className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wide">Urgent</span>
+                <span className="text-xs font-bold text-game-pink uppercase tracking-wide">Urgent</span>
               )}
             </div>
           </div>
           <button
             onClick={handleDone}
-            className="p-1.5 rounded-lg text-slate-300 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors shrink-0"
+            className="p-1.5 rounded-xl text-card-outline/40 hover:text-game-mint hover:bg-game-mint/30 transition-colors shrink-0"
             aria-label="Mark as done"
             title="Mark done"
           >
@@ -148,40 +147,34 @@ function BriefCard({
           </button>
         </div>
 
-        {/* Insight text */}
-        <p className="text-sm text-slate-700 dark:text-slate-300 leading-snug mt-2.5">{item.insight}</p>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{item.detail}</p>
+        <p className="text-sm text-game-text leading-snug mt-2.5">{item.insight}</p>
+        <p className="text-xs text-game-purple/60 mt-1">{item.detail}</p>
 
-        {/* HP bar */}
         {item.hpDays !== null && (
           <div className="mt-2.5">
             <HpBar hpDays={item.hpDays} />
           </div>
         )}
 
-        {/* Meta row: last contact · timing · confidence */}
         <div className="flex items-center gap-3 flex-wrap mt-2.5">
-          <div className="flex items-center gap-1 text-xs text-slate-400">
+          <div className="flex items-center gap-1 text-xs text-game-purple/60">
             <IconClockHour4 size={11} />
             {item.daysSinceContact !== null
-              ? item.daysSinceContact === 0
-                ? 'Contacted today'
-                : `Last contact: ${item.daysSinceContact}d ago`
+              ? item.daysSinceContact === 0 ? 'Contacted today' : `Last contact: ${item.daysSinceContact}d ago`
               : 'Never contacted'}
           </div>
-          <div className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 font-medium">
+          <div className="flex items-center gap-1 text-xs text-game-pink font-semibold">
             <IconShieldCheck size={11} />
             {item.suggestedTiming}
           </div>
           <ConfidencePip score={item.confidenceScore} />
         </div>
 
-        {/* Action buttons */}
         <div className="flex items-center gap-2 mt-3">
           <button
             onClick={() => onDraft(item)}
             className={cn(
-              'flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors',
+              'flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-2xl transition-colors',
               action.className
             )}
           >
@@ -191,7 +184,7 @@ function BriefCard({
           {item.suggestedAction !== 'call' && (
             <a
               href={`tel:${item.phone}`}
-              className="flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors"
+              className="flex items-center gap-1.5 text-xs font-semibold text-game-purple px-2.5 py-1.5 rounded-2xl hover:bg-pastel-lavender transition-colors"
             >
               <IconPhone size={13} />
               Call
@@ -229,21 +222,21 @@ export function MorningBrief({ items, agentFirstName, generatedAt }: MorningBrie
 
   return (
     <>
-      <div className="bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 rounded-2xl overflow-hidden shadow-md">
+      <div className="bg-card-cream rounded-3xl border-2 border-card-outline/60 overflow-hidden shadow-[0_4px_20px_rgba(107,33,217,0.10)]">
         {/* Header */}
-        <div className="px-5 py-4 flex items-center justify-between">
+        <div className="px-5 py-4 flex items-center justify-between bg-pastel-lavender border-b-2 border-card-outline/20">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-              <IconSparkles size={18} className="text-amber-300" />
+            <div className="w-9 h-9 rounded-2xl bg-game-purple flex items-center justify-center shrink-0">
+              <IconSparkles size={18} className="text-white" />
             </div>
             <div>
-              <p className="text-white font-bold text-sm leading-tight">
-                Morning Brief — Good morning, {agentFirstName}
+              <p className="text-game-text font-bold leading-tight font-handwriting text-base">
+                Morning Brief — {agentFirstName}!
               </p>
-              <p className="text-slate-400 text-xs mt-0.5">
+              <p className="text-game-purple/60 text-xs mt-0.5">
                 Generated at {generatedAt} · {visible.length} active insight{visible.length !== 1 ? 's' : ''}
                 {overdueContact > 0 && (
-                  <span className="text-red-400 ml-1">· {overdueContact} overdue contact{overdueContact !== 1 ? 's' : ''}</span>
+                  <span className="text-game-pink ml-1">· {overdueContact} overdue</span>
                 )}
               </p>
             </div>
@@ -252,14 +245,14 @@ export function MorningBrief({ items, agentFirstName, generatedAt }: MorningBrie
             <button
               onClick={handleRefresh}
               disabled={refreshing}
-              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-2 rounded-xl text-game-purple hover:bg-card-outline/10 transition-colors"
               aria-label="Refresh brief"
             >
               <IconRefresh size={15} className={refreshing ? 'animate-spin' : ''} />
             </button>
             <button
               onClick={() => setExpanded(v => !v)}
-              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-2 rounded-xl text-game-purple hover:bg-card-outline/10 transition-colors"
             >
               {expanded ? <IconChevronUp size={15} /> : <IconChevronDown size={15} />}
             </button>
@@ -267,33 +260,33 @@ export function MorningBrief({ items, agentFirstName, generatedAt }: MorningBrie
         </div>
 
         {/* Summary pills */}
-        <div className="px-5 pb-4 flex items-center gap-2 flex-wrap">
+        <div className="px-5 py-3 flex items-center gap-2 flex-wrap">
           {urgentCount > 0 && (
-            <div className="flex items-center gap-1.5 bg-red-500/20 text-red-300 text-xs font-semibold px-3 py-1.5 rounded-full">
+            <div className="flex items-center gap-1.5 bg-red-100 text-red-700 text-xs font-bold px-3 py-1.5 rounded-full">
               <IconAlertTriangle size={11} />
               {urgentCount} urgent
             </div>
           )}
           {milestoneCount > 0 && (
-            <div className="flex items-center gap-1.5 bg-amber-500/20 text-amber-300 text-xs font-semibold px-3 py-1.5 rounded-full">
+            <div className="flex items-center gap-1.5 bg-[#FFF9C4] text-[#7A4F00] text-xs font-bold px-3 py-1.5 rounded-full">
               <IconTrophy size={11} />
               {milestoneCount} milestone{milestoneCount !== 1 ? 's' : ''}
             </div>
           )}
           {lifeStageCount > 0 && (
-            <div className="flex items-center gap-1.5 bg-violet-500/20 text-violet-300 text-xs font-semibold px-3 py-1.5 rounded-full">
+            <div className="flex items-center gap-1.5 bg-pastel-lavender text-game-purple-deep text-xs font-bold px-3 py-1.5 rounded-full">
               <IconBabyCarriage size={11} />
               {lifeStageCount} life stage
             </div>
           )}
           {overdueContact > 0 && (
-            <div className="flex items-center gap-1.5 bg-orange-500/20 text-orange-300 text-xs font-semibold px-3 py-1.5 rounded-full">
+            <div className="flex items-center gap-1.5 bg-game-peach text-[#92400E] text-xs font-bold px-3 py-1.5 rounded-full">
               <IconClockHour4 size={11} />
               {overdueContact} overdue contact{overdueContact !== 1 ? 's' : ''}
             </div>
           )}
           {dismissed.size > 0 && (
-            <div className="flex items-center gap-1.5 bg-white/10 text-slate-400 text-xs font-medium px-3 py-1.5 rounded-full">
+            <div className="flex items-center gap-1.5 bg-game-mint text-[#065F46] text-xs font-medium px-3 py-1.5 rounded-full">
               <IconCheck size={11} />
               {dismissed.size} done
             </div>
@@ -325,7 +318,7 @@ export function MorningBrief({ items, agentFirstName, generatedAt }: MorningBrie
                 ))}
               </AnimatePresence>
             </div>
-            <p className="text-center text-xs text-slate-400 dark:text-slate-500 mt-3 pb-1">
+            <p className="text-center text-xs text-game-purple/50 mt-3 pb-1">
               You decide who to contact first — and what to say.
             </p>
           </motion.div>
@@ -336,10 +329,10 @@ export function MorningBrief({ items, agentFirstName, generatedAt }: MorningBrie
             key="empty"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-6 text-sm text-slate-400"
+            className="text-center py-6 text-sm text-game-purple"
           >
-            <IconHeart size={20} className="mx-auto mb-2 text-emerald-400" />
-            All insights actioned. Great work today!
+            <IconHeart size={20} className="mx-auto mb-2 text-game-pink" />
+            All insights actioned. Great work today! 🎉
           </motion.div>
         )}
       </AnimatePresence>
@@ -365,15 +358,11 @@ function buildBriefDraft(item: MorningBriefItem): string {
   if (item.type === 'milestone') {
     return `Hi ${firstName}! ⭐ Just wanted to reach out and say congratulations — you've hit a great milestone on your protection journey!\n\nThank you for being such a consistent client. If you'd like to chat about how your coverage is growing alongside your goals, I'm always here.\n\nTake care! 😊`;
   }
-  if (item.tag === 'Coverage Gap' || item.tag === 'HP Warning') {
-    return `Hi ${firstName}! 👋 This is Farah from SecureLife Insurance.\n\nI've been reviewing your account and noticed there may be a gap in your current coverage. I'd love to walk you through a quick review — it won't take long and could make a real difference.\n\nAre you free for a short call this week?`;
-  }
   return `Hi ${firstName}! 👋 This is Farah from SecureLife Insurance.\n\nJust checking in to see how you're doing and whether there's anything I can help with regarding your coverage.\n\nFeel free to reach out anytime! 😊`;
 }
 
 function InlineDraftSheet({ item, onClose }: { item: MorningBriefItem; onClose: () => void }) {
   const [draft, setDraft] = useState(() => buildBriefDraft(item));
-
   const waLink = `https://wa.me/${item.phone.replace(/[\s\-\+()]/g, '')}?text=${encodeURIComponent(draft)}`;
 
   return (
@@ -392,44 +381,33 @@ function InlineDraftSheet({ item, onClose }: { item: MorningBriefItem; onClose: 
         animate={{ y: 0 }}
         exit={{ y: '100%' }}
         transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-        className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 rounded-t-3xl shadow-2xl max-h-[85vh] flex flex-col"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-card-cream rounded-t-3xl shadow-2xl max-h-[85vh] flex flex-col border-t-2 border-card-outline"
       >
         <div className="flex justify-center pt-3 pb-1 shrink-0">
-          <div className="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+          <div className="w-10 h-1 rounded-full bg-card-outline/30" />
         </div>
-        <div className="px-5 py-3 border-b border-slate-100 dark:border-slate-700/60 shrink-0 flex items-center justify-between">
+        <div className="px-5 py-3 border-b-2 border-card-outline/20 shrink-0 flex items-center justify-between">
           <div>
-            <p className="font-bold text-slate-900 dark:text-white text-sm">Draft Follow-up</p>
-            <p className="text-xs text-slate-500 mt-0.5">
-              To: {item.clientName} · {item.phone}
-            </p>
+            <p className="font-handwriting text-xl text-game-text">Draft Follow-up</p>
+            <p className="text-xs text-game-purple mt-0.5">To: {item.clientName} · {item.phone}</p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-xl text-game-purple/40 hover:text-red-500 hover:bg-red-50 transition-colors"
           >
             <IconX size={16} />
           </button>
         </div>
 
-        {/* Context strip */}
-        <div className="px-5 py-2.5 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-100 dark:border-slate-700/40 shrink-0 flex items-center gap-4 flex-wrap">
-          <span className={cn(
-            'text-xs font-medium px-2 py-0.5 rounded-full',
-            typeConfig[item.type].badgeClass
-          )}>
+        <div className="px-5 py-2.5 bg-pastel-lavender/50 border-b border-card-outline/15 shrink-0 flex items-center gap-3 flex-wrap">
+          <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full', typeConfig[item.type].badgeClass)}>
             {item.tag}
           </span>
           {item.hpDays !== null && (
-            <span className="text-xs text-slate-500 dark:text-slate-400">
-              HP: <span className={cn('font-semibold', item.hpDays <= 0 ? 'text-red-500' : item.hpDays < 100 ? 'text-amber-500' : 'text-emerald-600')}>
+            <span className="text-xs text-game-purple">
+              HP: <span className={cn('font-bold', item.hpDays <= 0 ? 'text-red-500' : item.hpDays < 100 ? 'text-game-pink' : 'text-[#065F46]')}>
                 {item.hpDays <= 0 ? 'Lapsed' : `${item.hpDays} days`}
               </span>
-            </span>
-          )}
-          {item.daysSinceContact !== null && (
-            <span className="text-xs text-slate-500 dark:text-slate-400">
-              Last contact: <span className="font-semibold text-slate-700 dark:text-slate-300">{item.daysSinceContact}d ago</span>
             </span>
           )}
         </div>
@@ -439,22 +417,22 @@ function InlineDraftSheet({ item, onClose }: { item: MorningBriefItem; onClose: 
             value={draft}
             onChange={e => setDraft(e.target.value)}
             rows={9}
-            className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent leading-relaxed"
+            className="w-full rounded-2xl border-2 border-card-outline/40 bg-pastel-yellow text-game-text text-sm px-4 py-3 resize-none focus:outline-none focus:border-card-outline leading-relaxed"
           />
-          <p className="text-right text-xs text-slate-400 mt-1">{draft.length} characters</p>
+          <p className="text-right text-xs text-game-purple/50 mt-1">{draft.length} characters</p>
         </div>
 
-        <div className="px-5 py-4 border-t border-slate-100 dark:border-slate-700/60 shrink-0 space-y-2">
+        <div className="px-5 py-4 border-t-2 border-card-outline/15 shrink-0 space-y-2">
           <a
             href={waLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5a] text-white font-semibold text-sm transition-colors shadow-sm"
+            className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl bg-[#25D366] hover:opacity-90 text-white font-bold text-sm transition-opacity shadow-sm"
           >
             <IconBrandWhatsapp size={20} />
             Open in WhatsApp
           </a>
-          <p className="text-center text-xs text-slate-400">You send the message manually in WhatsApp</p>
+          <p className="text-center text-xs text-game-purple/50">You send the message manually in WhatsApp</p>
         </div>
       </motion.div>
     </>

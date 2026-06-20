@@ -16,8 +16,8 @@ export default function LeaderboardPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <AgentHeader
-        title="Agent Leaderboard"
-        subtitle={`${new Date().toLocaleDateString('en-MY', { month: 'long', year: 'numeric' })} Rankings`}
+        title="🏆 Agent Leaderboard"
+        subtitle={`${new Date(2026, 5, 20).toLocaleDateString('en-MY', { month: 'long', year: 'numeric' })} Rankings`}
       />
 
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
@@ -25,7 +25,7 @@ export default function LeaderboardPage() {
 
         {/* Podium — top 3 */}
         <div>
-          <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Top Performers</h2>
+          <p className="text-xs font-bold text-game-purple uppercase tracking-wider mb-4">🥇 Top Performers</p>
           <div className="grid sm:grid-cols-3 gap-4">
             {top3.map(agent => (
               <AgentLeaderboardCard
@@ -37,9 +37,9 @@ export default function LeaderboardPage() {
           </div>
         </div>
 
-        {/* Ranks 4–10 in a mini-card grid */}
+        {/* Ranks 4–10 */}
         <div>
-          <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Ranks 4 – 10</h2>
+          <p className="text-xs font-bold text-game-purple uppercase tracking-wider mb-4">Ranks 4 – 10</p>
           <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
             {rest.map(agent => (
               <AgentLeaderboardCard
@@ -53,7 +53,7 @@ export default function LeaderboardPage() {
 
         {/* Full table */}
         <div>
-          <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Full Rankings Table</h2>
+          <p className="text-xs font-bold text-game-purple uppercase tracking-wider mb-4">Full Rankings Table</p>
           <AgentLeaderboardTable agents={agents} currentAgentId={CURRENT_AGENT_ID} showAll />
         </div>
       </main>

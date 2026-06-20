@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import type { ComponentType } from 'react';
-import { cn } from '@/utils/cn';
 
 interface AgentStatCardProps {
   label: string;
@@ -11,15 +10,15 @@ interface AgentStatCardProps {
   icon: ComponentType<{ size?: number; className?: string; stroke?: number }>;
   trend?: 'up' | 'down' | 'neutral';
   trendValue?: string;
-  accent?: 'blue' | 'emerald' | 'amber' | 'violet';
+  accent?: 'pink' | 'peach' | 'mint' | 'lavender';
   delay?: number;
 }
 
 const accentMap = {
-  blue: { icon: 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400', ring: 'ring-blue-100 dark:ring-blue-900/30' },
-  emerald: { icon: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400', ring: 'ring-emerald-100 dark:ring-emerald-900/30' },
-  amber: { icon: 'bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400', ring: 'ring-amber-100 dark:ring-amber-900/30' },
-  violet: { icon: 'bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400', ring: 'ring-violet-100 dark:ring-violet-900/30' },
+  pink: 'bg-game-pink-soft text-game-pink',
+  peach: 'bg-game-peach text-[#C05621]',
+  mint: 'bg-game-mint text-[#065F46]',
+  lavender: 'bg-pastel-lavender text-game-purple',
 };
 
 export function AgentStatCard({
@@ -29,36 +28,37 @@ export function AgentStatCard({
   icon: Icon,
   trend,
   trendValue,
-  accent = 'blue',
+  accent = 'lavender',
   delay = 0,
 }: AgentStatCardProps) {
-  const colors = accentMap[accent];
+  const iconColor = accentMap[accent];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -3, transition: { duration: 0.2 } }}
       transition={{ duration: 0.4, delay }}
-      className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700/50 shadow-sm"
+      className="bg-card-cream rounded-3xl p-5 border-2 border-card-outline shadow-[0_4px_20px_rgba(107,33,217,0.10)]"
     >
       <div className="flex items-start justify-between">
-        <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center ring-4', colors.icon, colors.ring)}>
-          <Icon size={20} stroke={1.8} />
+        <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${iconColor}`}>
+          <Icon size={22} stroke={1.8} />
         </div>
         {trend && trendValue && (
-          <span className={cn(
-            'text-xs font-semibold px-2 py-0.5 rounded-full',
-            trend === 'up' && 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400',
-            trend === 'down' && 'bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400',
-            trend === 'neutral' && 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400',
-          )}>
+          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+            trend === 'up' ? 'bg-game-mint text-[#065F46]' :
+            trend === 'down' ? 'bg-red-100 text-red-600' :
+            'bg-pastel-lavender text-game-purple'
+          }`}>
             {trend === 'up' ? '↑' : trend === 'down' ? '↓' : '—'} {trendValue}
           </span>
         )}
       </div>
       <div className="mt-4">
-        <p className="text-2xl font-bold text-slate-900 dark:text-white">{value}</p>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{label}</p>
-        {subtext && <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{subtext}</p>}
+        <p className="text-2xl font-bold text-game-text">{value}</p>
+        <p className="text-sm text-game-purple mt-0.5 font-semibold">{label}</p>
+        {subtext && <p className="text-xs text-game-purple-deep/60 mt-1">{subtext}</p>}
       </div>
     </motion.div>
   );

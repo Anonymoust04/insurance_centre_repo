@@ -16,25 +16,26 @@ interface AiToolCardProps {
 export function AiToolCard({ id, icon: Icon, title, description, isActive, delay = 0, onClick }: AiToolCardProps) {
   return (
     <motion.button
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -2, transition: { duration: 0.15 } }}
       transition={{ duration: 0.3, delay }}
       onClick={() => onClick(id)}
       className={cn(
-        'w-full text-left p-4 rounded-2xl border transition-all duration-200',
+        'w-full text-left p-4 rounded-3xl border-2 transition-all duration-200',
         isActive
-          ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-200 dark:shadow-blue-900/30'
-          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-sm'
+          ? 'bg-game-pink-soft border-game-pink shadow-[0_4px_16px_rgba(255,79,184,0.20)]'
+          : 'bg-card-cream border-card-outline/40 hover:border-card-outline/70 hover:shadow-sm'
       )}
     >
       <div className={cn(
-        'w-9 h-9 rounded-xl flex items-center justify-center mb-3',
-        isActive ? 'bg-white/20' : 'bg-blue-50 dark:bg-blue-900/20'
+        'w-9 h-9 rounded-2xl flex items-center justify-center mb-3',
+        isActive ? 'bg-game-pink' : 'bg-pastel-lavender'
       )}>
-        <Icon size={18} className={isActive ? 'text-white' : 'text-blue-600 dark:text-blue-400'} />
+        <Icon size={18} className={isActive ? 'text-white' : 'text-game-purple'} />
       </div>
-      <p className={cn('text-sm font-semibold', isActive ? 'text-white' : 'text-slate-900 dark:text-white')}>{title}</p>
-      <p className={cn('text-xs mt-1 leading-relaxed', isActive ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400')}>{description}</p>
+      <p className={cn('text-sm font-bold', isActive ? 'text-game-text' : 'text-game-text')}>{title}</p>
+      <p className={cn('text-xs mt-1 leading-relaxed', isActive ? 'text-game-purple-deep' : 'text-game-purple/60')}>{description}</p>
     </motion.button>
   );
 }

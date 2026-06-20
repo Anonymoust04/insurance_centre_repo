@@ -10,8 +10,18 @@
   --color-pastel-pink: #ffd6e4;
   --color-pastel-lavender: #e9d5ff;
   --color-card-cream: #fffdf8;
-  --color-card-outline: #5b21b6; /* darker purple for sketch lines */
+  --color-card-outline: #6B21D9;
   --color-card-text: #4c1d95;
+
+  /* Game UI accent palette */
+  --color-game-pink: #FF4FB8;
+  --color-game-pink-soft: #FFD6EC;
+  --color-game-peach: #FFE3C2;
+  --color-game-mint: #CCFCE8;
+  --color-game-yellow: #FFF4A8;
+  --color-game-purple: #6B21D9;
+  --color-game-purple-deep: #4C1D95;
+  --color-game-text: #3B0764;
 
   --color-energy-fire: #ffb3a7;
   --color-energy-water: #a7d8ff;
