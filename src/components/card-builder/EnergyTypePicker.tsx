@@ -18,7 +18,7 @@ const energyTypes: { type: EnergyType; colorClass: string }[] = [
 export function EnergyTypePicker({ selected, onSelect }: EnergyTypePickerProps) {
   return (
     <div className="flex flex-col gap-4 bg-white/50 p-6 border-sketch-sm shadow-sm">
-      <h2 className="font-handwriting text-3xl font-bold text-card-outline">2. Choose Energy</h2>
+      <h2 className="font-handwriting text-3xl font-bold text-card-outline">Choose Your Energy</h2>
       
       <div className="flex flex-wrap gap-3">
         {energyTypes.map(({ type, colorClass }) => {
