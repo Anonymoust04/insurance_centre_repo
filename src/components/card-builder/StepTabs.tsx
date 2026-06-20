@@ -1,11 +1,10 @@
 import React from 'react';
-import { IconUser, IconShield, IconCreditCard, IconStar } from '@tabler/icons-react';
+import { IconUser, IconShield, IconCreditCard } from '@tabler/icons-react';
 
 const steps = [
   { label: 'Image', icon: <IconUser size={22} stroke={2} /> },
   { label: 'Plan', icon: <IconShield size={22} stroke={2} /> },
   { label: 'Payment', icon: <IconCreditCard size={22} stroke={2} /> },
-  { label: 'Missions', icon: <IconStar size={22} stroke={2} /> },
 ];
 
 interface StepTabsProps {

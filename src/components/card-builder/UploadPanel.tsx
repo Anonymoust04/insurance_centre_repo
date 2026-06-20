@@ -6,6 +6,8 @@ interface UploadPanelProps {
   onImageChange: (imageUrl: string) => void;
   name: string;
   onNameChange: (name: string) => void;
+  currentAge: number;
+  onCurrentAgeChange: (age: number) => void;
   gender: Gender;
   onGenderChange: (g: Gender) => void;
   occupation: string;
@@ -58,6 +60,8 @@ export function UploadPanel({
   onImageChange,
   name,
   onNameChange,
+  currentAge,
+  onCurrentAgeChange,
   gender,
   onGenderChange,
   occupation,
@@ -87,16 +91,30 @@ export function UploadPanel({
         1. Who is this card for?
       </h2>
 
-      {/* Card Name */}
-      <div className="flex flex-col gap-2">
-        <label className="font-bold text-lg">Card Name</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => onNameChange(e.target.value)}
-          placeholder="e.g. Super Mom"
-          className="border-sketch-sm px-4 py-2 font-sans text-lg focus:outline-none focus:ring-4 ring-pastel-pink/50 bg-white"
-        />
+      {/* Card Name + Age row */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col gap-2 flex-1">
+          <label className="font-bold text-lg">Card Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => onNameChange(e.target.value)}
+            placeholder="e.g. Super Mom"
+            className="border-sketch-sm px-4 py-2 font-sans text-lg focus:outline-none focus:ring-4 ring-pastel-pink/50 bg-white"
+          />
+        </div>
+        <div className="flex flex-col gap-2 sm:w-28">
+          <label className="font-bold text-lg">Your Age</label>
+          <input
+            type="number"
+            min="18"
+            max="99"
+            value={currentAge || ''}
+            onChange={(e) => onCurrentAgeChange(parseInt(e.target.value) || 0)}
+            placeholder="30"
+            className="border-sketch-sm px-4 py-2 font-sans text-lg focus:outline-none focus:ring-4 ring-pastel-pink/50 bg-white w-full text-center font-bold"
+          />
+        </div>
       </div>
 
       {/* Photo */}
