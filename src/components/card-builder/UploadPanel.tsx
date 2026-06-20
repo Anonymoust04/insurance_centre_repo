@@ -132,7 +132,7 @@ export function UploadPanel({
       formData.append('photo', selectedFile);
 
       const response = await fetch(
-        'http://localhost:4000/api/generate-portrait',
+        '/api/generate-portrait',
         {
           method: 'POST',
           body: formData,
