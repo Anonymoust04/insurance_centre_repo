@@ -50,32 +50,88 @@ export async function POST(request: NextRequest) {
     cfForm.append('width', '1024');
     cfForm.append('height', '1024');
 
-    const cfResponse = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/ai/run/${CF_MODEL}`,
-      {
-        method: 'POST',
+    let imageBuffer: Buffer | null = null;
+    let cfError: string | null = null;
 
-        headers: { Authorization: `Bearer ${CF_API_TOKEN}` },
-        body: cfForm,
+    try {
+      const cfResponse = await fetch(
+        `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/ai/run/${CF_MODEL}`,
+        {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${CF_API_TOKEN}` },
+          body: cfForm,
+        }
+      );
+
+      if (!cfResponse.ok) {
+        cfError = await cfResponse.text();
+        console.error('Cloudflare Workers AI error:', cfResponse.status, cfError);
+      } else {
+        const data = await cfResponse.json();
+        if (data.result?.image) {
+          imageBuffer = Buffer.from(data.result.image, 'base64');
+        } else {
+          cfError = 'No image in Workers AI response';
+        }
       }
-    );
-
-
-    if (!cfResponse.ok) {
-      const errorText = await cfResponse.text();
-      console.error('Cloudflare Workers AI error:', cfResponse.status, errorText);
-      throw new Error(`Workers AI request failed: ${cfResponse.status}`);
+    } catch (err: any) {
+      cfError = err.message;
+      console.error('Cloudflare fetch failed:', err);
     }
 
-    const data = await cfResponse.json();
+    // FALLBACK to Gemini if Cloudflare failed (e.g., 429 rate limit)
+    if (!imageBuffer) {
+      console.log('Falling back to Gemini...');
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        throw new Error(`Cloudflare failed (${cfError}) and GEMINI_API_KEY is not configured for fallback.`);
+      }
 
-    // Standard Workers AI envelope: { result: { image: "<base64 png>" }, success, errors, messages }
-    if (!data.result?.image) {
-      console.error('Unexpected CF response:', JSON.stringify(data).slice(0, 500));
-      throw new Error('No image in Workers AI response');
+      const { GoogleGenAI } = await import('@google/genai');
+      const ai = new GoogleGenAI({ apiKey });
+
+      const base64Data = photoBuffer.toString('base64');
+      const mimeType = photoFile.type || 'image/jpeg';
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash-preview-image-generation',
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              {
+                inlineData: {
+                  mimeType,
+                  data: base64Data,
+                },
+              },
+              {
+                text: STYLE_PROMPT,
+              },
+            ],
+          },
+        ],
+        config: {
+          responseModalities: ['TEXT', 'IMAGE'],
+        },
+      });
+
+      const parts = response.candidates?.[0]?.content?.parts;
+      if (!parts) {
+        throw new Error('No response from Gemini AI fallback');
+      }
+
+      for (const part of parts) {
+        if (part.inlineData && part.inlineData.data) {
+          imageBuffer = Buffer.from(part.inlineData.data, 'base64');
+          break;
+        }
+      }
+
+      if (!imageBuffer) {
+        throw new Error('Gemini AI fallback did not return an image');
+      }
     }
-
-    const imageBuffer = Buffer.from(data.result.image, 'base64');
 
     return new Response(imageBuffer, {
       headers: {
@@ -87,6 +143,4 @@ export async function POST(request: NextRequest) {
     console.error('Portrait generation error:', error);
     const message = error instanceof Error ? error.message : 'Failed to generate portrait';
     return Response.json({ error: message }, { status: 500 });
-
-  }
 }
