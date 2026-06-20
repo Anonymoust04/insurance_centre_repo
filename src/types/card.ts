@@ -9,7 +9,7 @@ export type InsurancePlan =
 export type IncomeRange = '<2k' | '2k-5k' | '5k-10k' | '>10k';
 export type DependentsCount = 0 | 1 | 2 | '3+';
 export type TopConcern = 'health' | 'family' | 'income' | 'wealth';
-export type Gender = 'male' | 'female' | 'prefer-not-to-say';
+export type Gender = 'male' | 'female' | '';
 
 export interface CardData {
   // Identity

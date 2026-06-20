@@ -8,21 +8,26 @@ import {
   IconRobot,
   IconPhoneCall,
   IconBulb,
+  IconShieldCheck,
+  IconUserPlus,
 } from '@tabler/icons-react';
 
 const TOOL_ICONS: Record<string, React.ReactNode> = {
   'credit-card': <IconCreditCard size={28} stroke={1.5} />,
   'stethoscope': <IconStethoscope size={28} stroke={1.5} />,
   'clipboard': <IconClipboardList size={28} stroke={1.5} />,
+  'user-plus': <IconUserPlus size={28} stroke={1.5} />,
   'robot': <IconRobot size={28} stroke={1.5} />,
   'phone': <IconPhoneCall size={28} stroke={1.5} />,
 };
 
 interface ToolsPanelProps {
   onToolClick: (id: string) => void;
+  onCheckIn: () => void;
+  isCheckedIn: boolean;
 }
 
-export function ToolsPanel({ onToolClick }: ToolsPanelProps) {
+export function ToolsPanel({ onToolClick, onCheckIn, isCheckedIn }: ToolsPanelProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
@@ -61,6 +66,20 @@ export function ToolsPanel({ onToolClick }: ToolsPanelProps) {
           <span className="font-bold">Tip:</span> Complete a Daily Checkup + Health Record to unlock your next booster pack faster.
         </p>
       </div>
+
+      {/* Check In Button */}
+      <button
+        onClick={onCheckIn}
+        disabled={isCheckedIn}
+        className={`w-full border-sketch-sm transition-all px-5 py-4 flex items-center justify-center gap-3 font-bold shadow-sm ${
+          isCheckedIn
+            ? 'bg-gray-200 text-gray-400 cursor-not-allowed border-gray-300'
+            : 'bg-energy-grass/50 hover:bg-energy-grass/70 text-card-outline hover:-translate-y-0.5 active:scale-[0.97]'
+        }`}
+      >
+        <IconShieldCheck size={24} stroke={1.5} />
+        <span className="font-handwriting text-2xl">{isCheckedIn ? 'Checked In ✓' : 'Check In'}</span>
+      </button>
     </div>
   );
 }

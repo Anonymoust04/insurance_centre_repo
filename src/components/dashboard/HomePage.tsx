@@ -138,7 +138,7 @@ export function HomePage() {
 
           {/* RIGHT — Tools (mobile: order-3, desktop: order-3) */}
           <div className="order-3">
-            <ToolsPanel onToolClick={handleToolClick} />
+            <ToolsPanel onToolClick={handleToolClick} onCheckIn={() => handleComplete('check-in')} isCheckedIn={missions.find(m => m.id === 'check-in')?.completed ?? false} />
           </div>
 
         </div>
