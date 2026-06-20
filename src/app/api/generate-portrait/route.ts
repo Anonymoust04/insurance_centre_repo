@@ -143,4 +143,5 @@ export async function POST(request: NextRequest) {
     console.error('Portrait generation error:', error);
     const message = error instanceof Error ? error.message : 'Failed to generate portrait';
     return Response.json({ error: message }, { status: 500 });
+  }
 }
