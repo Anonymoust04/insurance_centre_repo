@@ -9,6 +9,7 @@ import { PlanPicker } from '@/components/card-builder/PlanPicker';
 import { PaymentPanel } from '@/components/card-builder/PaymentPanel';
 import { StepTabs } from '@/components/card-builder/StepTabs';
 import { CardPreview } from '@/components/card-builder/CardPreview';
+import { PlanMatchWidget } from '@/components/card-builder/PlanMatchWidget';
 
 // localStorage key shared with the dashboard
 export const CARD_STORAGE_KEY = 'insurequest_card';
@@ -25,7 +26,7 @@ export default function CreateCardPage() {
     currentAge: 30,
     targetAge: 80,
     // AI profile fields
-    gender: 'prefer-not-to-say',
+    gender: '',
     occupation: '',
     incomeRange: '2k-5k',
     dependents: 0,
@@ -67,6 +68,22 @@ export default function CreateCardPage() {
   const buttonText = ['Continue to Plan', 'Continue to Payment', 'Confirm Purchase'][currentStep];
 
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+
+  const isStep0Complete = !!(
+    data.name.trim() &&
+    data.image &&
+    data.currentAge > 0 &&
+    data.gender !== '' &&
+    data.occupation.trim() &&
+    data.incomeRange &&
+    data.dependents !== null &&
+    data.hasExistingCoverage !== null &&
+    data.topConcern
+  );
+
+  const canProceed = currentStep === 0 ? isStep0Complete : true;
+
+  const [showPlanMatch, setShowPlanMatch] = useState(false);
 
   return (
     <div className="min-h-screen bg-pastel-yellow p-4 sm:p-8 font-sans text-card-text">
@@ -126,6 +143,7 @@ export default function CreateCardPage() {
               targetAge={data.targetAge}
               onTargetAgeChange={(targetAge) => updateData({ targetAge })}
               cardData={data}
+              onPlanMatchClick={() => setShowPlanMatch((prev) => !prev)}
             />
           )}
 
@@ -135,6 +153,9 @@ export default function CreateCardPage() {
           )}
 
           {/* Navigation */}
+          {currentStep === 0 && !isStep0Complete && (
+            <p className="text-red-500 text-sm font-bold text-center -mb-2">Please fill all fields and upload a photo to continue</p>
+          )}
           <div className="flex gap-4">
             {currentStep > 0 && (
               <button
@@ -147,7 +168,7 @@ export default function CreateCardPage() {
             )}
             <button
               onClick={currentStep === 2 ? handleConfirmPayment : handleNext}
-              disabled={isPaying}
+              disabled={isPaying || !canProceed}
               className={`flex-1 border-sketch transition-all py-4 text-xl font-bold font-handwriting text-card-outline shadow-md transform hover:-translate-y-1 active:scale-[0.98] disabled:cursor-not-allowed ${
                 currentStep === 2
                   ? 'bg-energy-grass hover:bg-green-300'
@@ -168,6 +189,7 @@ export default function CreateCardPage() {
 
         {/* Right Panel: Preview & Tabs */}
         <div className="lg:w-[500px] flex flex-col items-center sticky top-8 self-start">
+          {showPlanMatch && currentStep === 1 && <PlanMatchWidget cardData={data} />}
           <CardPreview data={data} />
           <StepTabs currentStep={currentStep} />
         </div>

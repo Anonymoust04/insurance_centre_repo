@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { IconUpload, IconWand } from '@tabler/icons-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { IconUpload, IconWand, IconCamera, IconX } from '@tabler/icons-react';
 import type {
   Gender,
   IncomeRange,
@@ -103,6 +103,67 @@ export function UploadPanel({
 
   const [isGenerating, setIsGenerating] =
     useState(false);
+
+  const [showCamera, setShowCamera] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const startCamera = async () => {
+    setShowCamera(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
+    } catch (err) {
+      console.error("Error accessing camera:", err);
+      alert("Could not access camera. Please check your permissions.");
+      setShowCamera(false);
+    }
+  };
+
+  const stopCamera = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+    }
+    setShowCamera(false);
+  };
+
+  const capturePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        // Draw the image
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const file = new File([blob], "camera-photo.jpg", { type: "image/jpeg" });
+            setSelectedFile(file);
+            const previewUrl = URL.createObjectURL(blob);
+            onImageChange(previewUrl);
+            onPhotoFileChange(file);
+            stopCamera();
+          }
+        }, 'image/jpeg');
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      // Ensure camera is turned off if component unmounts
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -220,6 +281,15 @@ export function UploadPanel({
 
           <button
             type="button"
+            onClick={startCamera}
+            className="flex-1 border-sketch-sm bg-pastel-lavender hover:bg-purple-300 transition-colors px-4 py-3 flex items-center justify-center gap-2 font-bold shadow-sm"
+          >
+            <IconCamera size={20} />
+            Take photo
+          </button>
+
+          <button
+            type="button"
             onClick={handleGeneratePortrait}
             disabled={
               !selectedFile || isGenerating
@@ -233,6 +303,32 @@ export function UploadPanel({
               : 'Generate cute portrait'}
           </button>
         </div>
+
+        {showCamera && (
+          <div className="flex flex-col gap-3 mt-2 p-4 border-sketch-sm bg-white rounded-xl items-center relative shadow-sm">
+            <button
+              onClick={stopCamera}
+              className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors z-10"
+              title="Close camera"
+            >
+              <IconX size={24} />
+            </button>
+            <video
+              ref={videoRef}
+              className="w-full max-w-sm bg-black rounded-lg transform scale-x-[-1] border-sketch-sm"
+              autoPlay
+              playsInline
+            />
+            <canvas ref={canvasRef} className="hidden" />
+            <button
+              onClick={capturePhoto}
+              className="border-sketch-sm bg-pastel-pink hover:bg-pink-300 transition-colors px-6 py-2 font-bold flex items-center gap-2 rounded-full shadow-sm"
+            >
+              <IconCamera size={20} />
+              Snap Photo
+            </button>
+          </div>
+        )}
       </div>
 
       {/* AI Profile Questions */}
@@ -265,10 +361,6 @@ export function UploadPanel({
               {
                 label: 'Female',
                 value: 'female',
-              },
-              {
-                label: 'Prefer not to say',
-                value: 'prefer-not-to-say',
               },
             ]}
             value={gender}

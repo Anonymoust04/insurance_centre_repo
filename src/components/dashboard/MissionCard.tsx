@@ -75,18 +75,12 @@ export function MissionCard({ mission, onComplete }: MissionCardProps) {
         <p className="text-[10px] opacity-40 mt-0.5 font-bold">{mission.progress}%</p>
       </div>
 
-      {/* Action */}
+      {/* Status */}
       <div className="pl-[42px]">
-        {!mission.completed ? (
-          <button
-            onClick={() => onComplete(mission.id)}
-            className="text-xs font-bold bg-pastel-pink text-card-outline px-3 py-1.5 border-[2px] border-pink-300 hover:bg-pink-300 transition-all active:scale-95"
-            style={{ borderRadius: '8px 10px 7px 9px' }}
-          >
-            Complete mission
-          </button>
+        {mission.completed ? (
+          <span className="text-xs font-bold text-green-600">✓ Mission done</span>
         ) : (
-          <span className="text-xs font-bold text-green-600">Mission done</span>
+          <span className="text-xs font-bold text-card-outline/40">In progress…</span>
         )}
       </div>
     </div>

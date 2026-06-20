@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   IconSparkles,
@@ -10,6 +10,8 @@ import {
   IconBabyCarriage,
   IconChevronDown,
   IconChevronUp,
+  IconChevronLeft,
+  IconChevronRight,
   IconBrandWhatsapp,
   IconPhone,
   IconCalendarEvent,
@@ -199,16 +201,25 @@ function BriefCard({
 }
 
 const priorityOrder = { high: 0, medium: 1, low: 2 };
+const PAGE_SIZE = 3;
 
 export function MorningBrief({ items, agentFirstName, generatedAt }: MorningBriefProps) {
   const [expanded, setExpanded] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
   const [draftTarget, setDraftTarget] = useState<MorningBriefItem | null>(null);
+  const [page, setPage] = useState(0);
 
   const visible = [...items]
     .filter(i => !dismissed.has(i.id))
     .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+
+  const pageCount = Math.ceil(visible.length / PAGE_SIZE);
+  const paged = visible.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+
+  useEffect(() => {
+    if (page > 0 && page >= pageCount) setPage(Math.max(0, pageCount - 1));
+  }, [page, pageCount]);
 
   const urgentCount = visible.filter(i => i.type === 'urgency').length;
   const milestoneCount = visible.filter(i => i.type === 'milestone').length;
@@ -219,6 +230,7 @@ export function MorningBrief({ items, agentFirstName, generatedAt }: MorningBrie
     setRefreshing(true);
     await new Promise(r => setTimeout(r, 1400));
     setDismissed(new Set());
+    setPage(0);
     setRefreshing(false);
   }
 
@@ -309,7 +321,7 @@ export function MorningBrief({ items, agentFirstName, generatedAt }: MorningBrie
           >
             <div className="space-y-2.5 mt-3">
               <AnimatePresence>
-                {visible.map((item, i) => (
+                {paged.map((item, i) => (
                   <BriefCard
                     key={item.id}
                     item={item}
@@ -320,7 +332,32 @@ export function MorningBrief({ items, agentFirstName, generatedAt }: MorningBrie
                 ))}
               </AnimatePresence>
             </div>
-            <p className="text-center text-xs text-game-purple/50 mt-3 pb-1">
+
+            {pageCount > 1 && (
+              <div className="flex items-center justify-center gap-3 mt-4 pb-1">
+                <button
+                  onClick={() => setPage(p => Math.max(0, p - 1))}
+                  disabled={page === 0}
+                  className="p-1.5 rounded-xl border-2 border-card-outline/30 text-game-purple disabled:opacity-30 disabled:cursor-not-allowed hover:bg-pastel-lavender transition-colors"
+                  aria-label="Previous page"
+                >
+                  <IconChevronLeft size={15} />
+                </button>
+                <span className="text-xs font-bold text-game-purple/70 tabular-nums">
+                  {page + 1} / {pageCount}
+                </span>
+                <button
+                  onClick={() => setPage(p => Math.min(pageCount - 1, p + 1))}
+                  disabled={page >= pageCount - 1}
+                  className="p-1.5 rounded-xl border-2 border-card-outline/30 text-game-purple disabled:opacity-30 disabled:cursor-not-allowed hover:bg-pastel-lavender transition-colors"
+                  aria-label="Next page"
+                >
+                  <IconChevronRight size={15} />
+                </button>
+              </div>
+            )}
+
+            <p className="text-center text-xs text-game-purple/50 mt-2 pb-1">
               You decide who to contact first — and what to say.
             </p>
           </motion.div>
