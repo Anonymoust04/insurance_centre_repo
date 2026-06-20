@@ -1,17 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CardData, EnergyType, InsurancePlan } from '@/types/card';
+import { useRouter } from 'next/navigation';
+import { CardData } from '@/types/card';
 import { UploadPanel } from '@/components/card-builder/UploadPanel';
 import { EnergyTypePicker } from '@/components/card-builder/EnergyTypePicker';
 import { PlanPicker } from '@/components/card-builder/PlanPicker';
 import { PaymentPanel } from '@/components/card-builder/PaymentPanel';
-import { MissionsPanel } from '@/components/card-builder/MissionsPanel';
 import { StepTabs } from '@/components/card-builder/StepTabs';
 import { CardPreview } from '@/components/card-builder/CardPreview';
 
+// localStorage key shared with the dashboard
+export const CARD_STORAGE_KEY = 'insurequest_card';
+
 export default function CreateCardPage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
+  const [isPaying, setIsPaying] = useState(false);
   const [data, setData] = useState<CardData>({
     name: '',
     image: null,
@@ -33,7 +38,7 @@ export default function CreateCardPage() {
   };
 
   const handleNext = () => {
-    if (currentStep < 3) {
+    if (currentStep < 2) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -44,12 +49,22 @@ export default function CreateCardPage() {
     }
   };
 
-  const buttonText = [
-    'Continue to Plan',
-    'Continue to Payment',
-    'Confirm Purchase',
-    'Finish!',
-  ][currentStep];
+  /** Called when user clicks "Confirm Purchase" on step 2 */
+  const handleConfirmPayment = () => {
+    setIsPaying(true);
+    // Save card to localStorage so the dashboard can read it
+    try {
+      localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(data));
+    } catch {
+      // localStorage not available (SSR safety)
+    }
+    // Simulate brief payment processing then redirect
+    setTimeout(() => {
+      router.push('/user-dashboard');
+    }, 1200);
+  };
+
+  const buttonText = ['Continue to Plan', 'Continue to Payment', 'Confirm Purchase'][currentStep];
 
   const [photoFile, setPhotoFile] = useState<File | null>(null);
 
@@ -78,6 +93,8 @@ export default function CreateCardPage() {
                 name={data.name}
                 onNameChange={(name) => updateData({ name })}
                 onImageChange={(image) => updateData({ image })}
+                currentAge={data.currentAge}
+                onCurrentAgeChange={(currentAge) => updateData({ currentAge })}
                 gender={data.gender}
                 onGenderChange={(gender) => updateData({ gender })}
                 occupation={data.occupation}
@@ -108,17 +125,13 @@ export default function CreateCardPage() {
               onCurrentAgeChange={(currentAge) => updateData({ currentAge })}
               targetAge={data.targetAge}
               onTargetAgeChange={(targetAge) => updateData({ targetAge })}
+              cardData={data}
             />
           )}
 
-          {/* Step 2 — Payment */}
+          {/* Step 2 — Payment (final step) */}
           {currentStep === 2 && (
             <PaymentPanel />
-          )}
-
-          {/* Step 3 — Missions */}
-          {currentStep === 3 && (
-            <MissionsPanel />
           )}
 
           {/* Navigation */}
@@ -126,16 +139,29 @@ export default function CreateCardPage() {
             {currentStep > 0 && (
               <button
                 onClick={handleBack}
-                className="px-6 bg-white border-sketch hover:bg-gray-50 transition-colors py-4 text-xl font-bold font-handwriting text-card-outline shadow-sm transform hover:-translate-y-1"
+                disabled={isPaying}
+                className="px-6 bg-white border-sketch hover:bg-gray-50 transition-colors py-4 text-xl font-bold font-handwriting text-card-outline shadow-sm transform hover:-translate-y-1 disabled:opacity-50"
               >
                 Back
               </button>
             )}
             <button
-              onClick={handleNext}
-              className="flex-1 bg-pastel-pink border-sketch hover:bg-pink-300 transition-colors py-4 text-xl font-bold font-handwriting text-card-outline shadow-md transform hover:-translate-y-1"
+              onClick={currentStep === 2 ? handleConfirmPayment : handleNext}
+              disabled={isPaying}
+              className={`flex-1 border-sketch transition-all py-4 text-xl font-bold font-handwriting text-card-outline shadow-md transform hover:-translate-y-1 active:scale-[0.98] disabled:cursor-not-allowed ${
+                currentStep === 2
+                  ? 'bg-energy-grass hover:bg-green-300'
+                  : 'bg-pastel-pink hover:bg-pink-300'
+              }`}
             >
-              {buttonText}
+              {isPaying ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="inline-block w-5 h-5 border-[3px] border-card-outline border-t-transparent rounded-full animate-spin" />
+                  Processing…
+                </span>
+              ) : (
+                buttonText
+              )}
             </button>
           </div>
         </div>
