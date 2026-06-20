@@ -10,16 +10,18 @@ import {
   IconLogout,
   IconBolt,
   IconSparkles,
+  IconTarget,
 } from '@tabler/icons-react';
 import { cn } from '@/utils/cn';
 import trophyImg from '@/assets/sidebar-trophy.png';
 import sparkleImg from '@/assets/sidebar-sparkle.png';
 
 const navItems = [
-  { label: 'Dashboard', href: '/agent/dashboard', icon: IconLayoutDashboard },
-  { label: 'AI Tools', href: '/agent/dashboard/ai-tools', icon: IconSparkles, badge: 'New' },
-  { label: 'Leaderboard', href: '/agent/dashboard/leaderboard', icon: IconTrophy },
-  { label: 'Customers', href: '/agent/dashboard/customers', icon: IconUsers },
+  { label: 'Dashboard',   href: '/agent/dashboard',            icon: IconLayoutDashboard },
+  { label: 'AI Tools',   href: '/agent/dashboard/ai-tools',   icon: IconSparkles, badge: 'New' },
+  { label: 'Missions',   href: '/agent/dashboard/missions',   icon: IconTarget },
+  { label: 'Leaderboard',href: '/agent/dashboard/leaderboard',icon: IconTrophy },
+  { label: 'Customers',  href: '/agent/dashboard/customers',  icon: IconUsers },
 ];
 
 export function AgentSidebar() {

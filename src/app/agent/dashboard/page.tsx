@@ -6,8 +6,6 @@ import briefData from '@/data/getMorningBrief.json';
 import type { AgentPerformance, CustomerProfile, MorningBriefItem } from '@/types/agent';
 import { AgentHeader } from '@/components/agent/AgentHeader';
 import { AgentStatCard } from '@/components/agent/AgentStatCard';
-import { AgentLeaderboardTable } from '@/components/agent/AgentLeaderboardTable';
-import { CustomerCard } from '@/components/agent/CustomerCard';
 import { MorningBrief } from '@/components/agent/MorningBrief';
 import { TodayPipeline } from '@/components/agent/TodayPipeline';
 import {
@@ -16,7 +14,6 @@ import {
   IconUsers,
   IconMedal,
   IconArrowRight,
-  IconTrophy,
   IconSparkles,
 } from '@tabler/icons-react';
 import Link from 'next/link';
@@ -247,80 +244,7 @@ export default function AgentDashboardPage() {
           </div>
         </div>
 
-        {/* Bottom panels */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          {/* Sales Performance placeholder */}
-          <div className="bg-card-cream rounded-3xl p-5 border-2 border-card-outline/60 shadow-[0_4px_16px_rgba(107,33,217,0.08)]">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-handwriting text-xl text-game-text flex items-center gap-2">
-                <IconTrophy size={18} className="text-[#FFD700]" />
-                Sales Performance
-              </h2>
-              <span className="text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full">This Month</span>
-            </div>
-            <AgentLeaderboardTable agents={agents} currentAgentId={CURRENT_AGENT_ID} showAll={false} />
-          </div>
 
-          {/* Upcoming Follow-ups */}
-          <div className="bg-card-cream rounded-3xl p-5 border-2 border-card-outline/60 shadow-[0_4px_16px_rgba(107,33,217,0.08)]">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-handwriting text-xl text-game-text">Upcoming Follow-ups</h2>
-              <Link href="/agent/dashboard/customers" className="text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full hover:bg-game-purple hover:text-white transition-colors">
-                View Calendar
-              </Link>
-            </div>
-            <div className="space-y-2">
-              {customers
-                .filter(c => c.nextFollowUpDate)
-                .sort((a, b) => new Date(a.nextFollowUpDate!).getTime() - new Date(b.nextFollowUpDate!).getTime())
-                .slice(0, 5)
-                .map((c, i) => {
-                  const daysLeft = Math.round((new Date(c.nextFollowUpDate!).getTime() - new Date('2026-06-20').getTime()) / (1000 * 60 * 60 * 24));
-                  const isDue = daysLeft <= 3;
-                  return (
-                    <motion.div
-                      key={c.id}
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.06 }}
-                      className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-pastel-yellow/60 transition-colors"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-game-purple border-2 border-card-outline/40 flex items-center justify-center text-white text-xs font-bold shrink-0">
-                        {c.avatar}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-game-text truncate">{c.fullName}</p>
-                        <p className="text-xs text-game-purple/60">{c.nextFollowUpDate}</p>
-                      </div>
-                      <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full shrink-0 ${
-                        isDue ? 'bg-game-pink-soft text-game-pink' : 'bg-pastel-lavender text-game-purple'
-                      }`}>
-                        {daysLeft <= 0 ? 'Today!' : `${daysLeft}d`}
-                      </span>
-                    </motion.div>
-                  );
-                })}
-            </div>
-          </div>
-        </div>
-
-        {/* Customer preview */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-handwriting text-xl text-game-text flex items-center gap-2">
-              <IconUsers size={18} className="text-game-purple" />
-              All Customers
-            </h2>
-            <Link href="/agent/dashboard/customers" className="flex items-center gap-1 text-xs font-bold text-game-purple bg-pastel-lavender px-3 py-1.5 rounded-full hover:bg-game-purple hover:text-white transition-colors">
-              All customers <IconArrowRight size={12} />
-            </Link>
-          </div>
-          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {customers.slice(0, 3).map((c, i) => (
-              <CustomerCard key={c.id} customer={c} delay={i * 0.06} />
-            ))}
-          </div>
-        </div>
       </main>
     </div>
   );
