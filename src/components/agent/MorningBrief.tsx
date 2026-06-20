@@ -19,6 +19,8 @@ import {
   IconClockHour4,
   IconShieldCheck,
   IconTargetArrow,
+  IconDeviceMobile,
+  IconDeviceDesktop,
 } from '@tabler/icons-react';
 import { cn } from '@/utils/cn';
 import type { MorningBriefItem } from '@/types/agent';
@@ -361,9 +363,14 @@ function buildBriefDraft(item: MorningBriefItem): string {
   return `Hi ${firstName}! 👋 This is Farah from SecureLife Insurance.\n\nJust checking in to see how you're doing and whether there's anything I can help with regarding your coverage.\n\nFeel free to reach out anytime! 😊`;
 }
 
+function cleanPhone(phone: string): string {
+  return phone.replace(/\D/g, '');
+}
+
 function InlineDraftSheet({ item, onClose }: { item: MorningBriefItem; onClose: () => void }) {
   const [draft, setDraft] = useState(() => buildBriefDraft(item));
-  const waLink = `https://wa.me/${item.phone.replace(/[\s\-\+()]/g, '')}?text=${encodeURIComponent(draft)}`;
+  const waAppLink = `https://wa.me/${cleanPhone(item.phone)}?text=${encodeURIComponent(draft)}`;
+  const waWebLink = `https://web.whatsapp.com/send?phone=${cleanPhone(item.phone)}&text=${encodeURIComponent(draft)}`;
 
   return (
     <>
@@ -422,17 +429,38 @@ function InlineDraftSheet({ item, onClose }: { item: MorningBriefItem; onClose: 
           <p className="text-right text-xs text-game-purple/50 mt-1">{draft.length} characters</p>
         </div>
 
-        <div className="px-5 py-4 border-t-2 border-card-outline/15 shrink-0 space-y-2">
-          <a
-            href={waLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl bg-[#25D366] hover:opacity-90 text-white font-bold text-sm transition-opacity shadow-sm"
-          >
-            <IconBrandWhatsapp size={20} />
-            Open in WhatsApp
-          </a>
-          <p className="text-center text-xs text-game-purple/50">You send the message manually in WhatsApp</p>
+        <div className="px-5 py-4 border-t-2 border-card-outline/15 shrink-0 space-y-3">
+          <p className="text-xs font-bold text-game-text uppercase tracking-wider flex items-center gap-1.5">
+            <IconBrandWhatsapp size={13} className="text-[#25D366]" />
+            Open in WhatsApp — choose where
+          </p>
+          <div className="grid grid-cols-2 gap-2.5">
+            <a
+              href={waAppLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center justify-center gap-1 py-3 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5a] text-white font-bold text-xs transition-colors text-center"
+            >
+              <div className="flex items-center gap-1.5">
+                <IconDeviceMobile size={15} />
+                <span className="text-sm font-bold">App</span>
+              </div>
+              <span className="text-white/70 font-normal">Opens mobile app</span>
+            </a>
+            <a
+              href={waWebLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center justify-center gap-1 py-3 rounded-2xl bg-card-cream border-2 border-[#25D366] text-[#1ebe5a] font-bold text-xs transition-colors hover:bg-game-mint/20 text-center"
+            >
+              <div className="flex items-center gap-1.5">
+                <IconDeviceDesktop size={15} />
+                <span className="text-sm font-bold">Web</span>
+              </div>
+              <span className="text-[#25D366]/70 font-normal">Opens in browser</span>
+            </a>
+          </div>
+          <p className="text-center text-xs text-game-purple/50">Message pre-filled — you send it manually</p>
         </div>
       </motion.div>
     </>

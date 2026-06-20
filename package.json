@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "cap:sync": "npm run build && npx cap sync android",
+    "cap:sync": "BUILD_TARGET=capacitor npm run build && npx cap sync android",
     "android": "npm run cap:sync && npx cap open android"
   },
   "dependencies": {
