@@ -51,6 +51,8 @@ export default function CreateCardPage() {
     'Finish!',
   ][currentStep];
 
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+
   return (
     <div className="min-h-screen bg-pastel-yellow p-4 sm:p-8 font-sans text-card-text">
 
@@ -88,6 +90,7 @@ export default function CreateCardPage() {
                 onHasExistingCoverageChange={(hasExistingCoverage) => updateData({ hasExistingCoverage })}
                 topConcern={data.topConcern}
                 onTopConcernChange={(topConcern) => updateData({ topConcern })}
+                onPhotoFileChange={(file) => setPhotoFile(file)}
               />
               <EnergyTypePicker
                 selected={data.energyType}
