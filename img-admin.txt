@@ -235,7 +235,7 @@ REPLACE            : Currently using Tabler IconMessage2 SVG.
 ---
 
 FILE NAME          : icon-ai-gap.png
-DESCRIPTION        : Shield with a magnifying glass for Protection Gap Explainer.
+DESCRIPTION        : Shield with a magnifying glass for Client Snapshot.
                      Purple shield with a small search/zoom icon inside.
                      Size: 36x36px.
 USED IN            : AiToolCard.tsx — Protection Gap tool icon.

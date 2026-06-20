@@ -108,7 +108,7 @@ Login and Signup are UI-only — no backend. Both include:
 |---|---|
 | **Smart Morning Brief** | Ranks all clients by urgency score (lapsed +40, critical HP +50, urgent HP +30, follow-up due +20, missing CI +15). Shows 4 sections: summary pills, urgent clients, recent activity feed, priority list. |
 | **Follow-up Draft Generator** | Select a client + tone (warm/professional/friendly) → generates 3 editable WhatsApp draft options. Copy Draft or Open WhatsApp Manually. Never auto-sends. |
-| **Protection Gap Explainer** | Reads `coverageDeck` and `missingCoverage` fields. Shows covered areas (green), gaps with risk impact (red/amber), talking points for client conversations, and a recommended next product. |
+| **Client Snapshot** | Reads `coverageDeck` and `missingCoverage` fields. Shows covered areas (green), gaps with risk impact (red/amber), talking points for client conversations, and a recommended next product. |
 | **Meeting Prep Card** | One-page brief: life stage, HP status, energy type, unclaimed boosters, coverage summary, key insights, suggested conversation opener. Print, Copy Opener, Mark as Prepared buttons. |
 
 All outputs are labelled **"AI Suggested"** and require advisor review before any action is taken.

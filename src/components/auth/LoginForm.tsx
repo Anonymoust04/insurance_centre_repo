@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { IconEye, IconEyeOff, IconWand } from '@tabler/icons-react';
+import Link from 'next/link';
+import { IconEye, IconEyeOff, IconWand, IconShieldLock } from '@tabler/icons-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 
@@ -95,6 +96,16 @@ export function LoginForm() {
           Create one free
         </a>
       </p>
+
+      <div className="border-t-2 border-dashed border-card-outline/20 pt-4 mt-1">
+        <Link
+          href="/agent/login"
+          className="flex items-center justify-center gap-2 w-full py-2.5 rounded-2xl border-2 border-card-outline/30 text-sm font-bold text-game-purple/70 hover:border-game-purple hover:text-game-purple hover:bg-pastel-lavender/40 transition-all"
+        >
+          <IconShieldLock size={16} />
+          Agent Portal Login
+        </Link>
+      </div>
     </form>
   );
 }
