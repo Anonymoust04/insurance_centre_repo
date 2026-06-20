@@ -12,7 +12,8 @@ export interface PlanCardData {
   description: string;
   helpsWith: string;
   bestFor: string;
-  affordabilityNote: string;
+  /** Base monthly price in RM before age-band adjustment */
+  basePriceMonthly: number;
   supportingFact?: string;
   abilities: [PlanAbility, PlanAbility];
   advisorNote: string;
@@ -20,6 +21,22 @@ export interface PlanCardData {
   accentClass: string;
   /** Tailwind text color for badge */
   badgeClass: string;
+}
+
+/** Age-band adjustment in RM/month added on top of base price */
+export function ageBandAdjustment(age: number): number {
+  if (age <= 25) return 0;
+  if (age <= 35) return 10;
+  if (age <= 45) return 25;
+  return 50;
+}
+
+export function calcMonthlyPrice(basePriceMonthly: number, age: number): number {
+  return basePriceMonthly + ageBandAdjustment(age);
+}
+
+export function calcYearlyPrice(basePriceMonthly: number, age: number): number {
+  return calcMonthlyPrice(basePriceMonthly, age) * 12;
 }
 
 export const planCards: PlanCardData[] = [
@@ -32,8 +49,7 @@ export const planCards: PlanCardData[] = [
     helpsWith: 'Hospital stays, surgery costs, and treatment-related medical expenses.',
     bestFor:
       'Anyone who wants practical day-to-day protection against rising medical costs.',
-    affordabilityNote:
-      'Contribution depends on age, plan level, and medical coverage selected.',
+    basePriceMonthly: 120,
     supportingFact:
       'Example: some medical products are yearly renewable up to age 70.',
     abilities: [
@@ -60,8 +76,7 @@ export const planCards: PlanCardData[] = [
     helpsWith: 'Financial support for your loved ones if life takes an unexpected turn.',
     bestFor:
       'Young adults, parents, breadwinners, and anyone building long-term family security.',
-    affordabilityNote:
-      'Contribution depends on age, coverage amount, and protection term.',
+    basePriceMonthly: 60,
     abilities: [
       {
         title: 'Protection Promise',
@@ -86,7 +101,7 @@ export const planCards: PlanCardData[] = [
     helpsWith: 'Lump-sum payout if diagnosed with a covered critical condition.',
     bestFor:
       'Clients worried about recovery costs, income disruption, or long treatment periods.',
-    affordabilityNote: 'Contribution usually increases with age and coverage amount.',
+    basePriceMonthly: 90,
     supportingFact:
       'CI cover can cover up to 39 critical illnesses, yearly renewable up to age 70, from RM50,000 to RM250,000.',
     abilities: [
@@ -113,8 +128,7 @@ export const planCards: PlanCardData[] = [
     helpsWith: 'Security of insurance protection plus potential investment growth.',
     bestFor:
       'Clients who want protection plus a longer-term planning conversation with an advisor.',
-    affordabilityNote:
-      'Contribution depends on coverage level, riders, investment structure, and long-term goals.',
+    basePriceMonthly: 150,
     supportingFact:
       'Coverage can go up to age 100 if the policy remains in force and the fund value is sufficient.',
     abilities: [

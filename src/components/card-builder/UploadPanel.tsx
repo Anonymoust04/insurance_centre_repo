@@ -1,21 +1,36 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { IconUpload, IconWand } from '@tabler/icons-react';
-import type { Gender, IncomeRange, DependentsCount, TopConcern } from '@/types/card';
+import type {
+  Gender,
+  IncomeRange,
+  DependentsCount,
+  TopConcern,
+} from '@/types/card';
 
 interface UploadPanelProps {
   onImageChange: (imageUrl: string) => void;
+
+  onPhotoFileChange: (file: File) => void;
+
   name: string;
   onNameChange: (name: string) => void;
+  currentAge: number;
+  onCurrentAgeChange: (age: number) => void;
   gender: Gender;
   onGenderChange: (g: Gender) => void;
+
   occupation: string;
   onOccupationChange: (o: string) => void;
+
   incomeRange: IncomeRange;
   onIncomeRangeChange: (r: IncomeRange) => void;
+
   dependents: DependentsCount;
   onDependentsChange: (d: DependentsCount) => void;
+
   hasExistingCoverage: boolean | null;
   onHasExistingCoverageChange: (v: boolean) => void;
+
   topConcern: TopConcern;
   onTopConcernChange: (c: TopConcern) => void;
 }
@@ -33,6 +48,7 @@ function ButtonGroup<T extends string | number | boolean>({
     <div className="flex flex-wrap gap-2">
       {options.map((opt) => {
         const isActive = value === opt.value;
+
         return (
           <button
             key={String(opt.value)}
@@ -56,28 +72,91 @@ function ButtonGroup<T extends string | number | boolean>({
 
 export function UploadPanel({
   onImageChange,
+  onPhotoFileChange,
+
   name,
   onNameChange,
+  currentAge,
+  onCurrentAgeChange,
   gender,
   onGenderChange,
+
   occupation,
   onOccupationChange,
+
   incomeRange,
   onIncomeRangeChange,
+
   dependents,
   onDependentsChange,
+
   hasExistingCoverage,
   onHasExistingCoverageChange,
+
   topConcern,
   onTopConcernChange,
 }: UploadPanelProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [selectedFile, setSelectedFile] =
+    useState<File | null>(null);
+
+  const [isGenerating, setIsGenerating] =
+    useState(false);
+
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      onImageChange(url);
+
+    if (!file) return;
+
+    setSelectedFile(file);
+
+    const previewUrl = URL.createObjectURL(file);
+
+    onImageChange(previewUrl);
+    onPhotoFileChange(file);
+  };
+
+  const handleGeneratePortrait = async () => {
+    if (!selectedFile) {
+      alert('Please upload a photo first.');
+      return;
+    }
+
+    try {
+      setIsGenerating(true);
+
+      const formData = new FormData();
+      formData.append('photo', selectedFile);
+
+      const response = await fetch(
+        'http://localhost:4000/api/generate-portrait',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to generate portrait');
+      }
+
+      const blob = await response.blob();
+
+      const generatedImageUrl =
+        URL.createObjectURL(blob);
+
+      onImageChange(generatedImageUrl);
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        'Failed to generate portrait. Check backend logs.'
+      );
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -87,21 +166,38 @@ export function UploadPanel({
         1. Who is this card for?
       </h2>
 
-      {/* Card Name */}
-      <div className="flex flex-col gap-2">
-        <label className="font-bold text-lg">Card Name</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => onNameChange(e.target.value)}
-          placeholder="e.g. Super Mom"
-          className="border-sketch-sm px-4 py-2 font-sans text-lg focus:outline-none focus:ring-4 ring-pastel-pink/50 bg-white"
-        />
+      {/* Card Name + Age row */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col gap-2 flex-1">
+          <label className="font-bold text-lg">Card Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => onNameChange(e.target.value)}
+            placeholder="e.g. Super Mom"
+            className="border-sketch-sm px-4 py-2 font-sans text-lg focus:outline-none focus:ring-4 ring-pastel-pink/50 bg-white"
+          />
+        </div>
+        <div className="flex flex-col gap-2 sm:w-28">
+          <label className="font-bold text-lg">Your Age</label>
+          <input
+            type="number"
+            min="18"
+            max="99"
+            value={currentAge || ''}
+            onChange={(e) => onCurrentAgeChange(parseInt(e.target.value) || 0)}
+            placeholder="30"
+            className="border-sketch-sm px-4 py-2 font-sans text-lg focus:outline-none focus:ring-4 ring-pastel-pink/50 bg-white w-full text-center font-bold"
+          />
+        </div>
       </div>
 
-      {/* Photo */}
+      {/* Photo Upload */}
       <div className="flex flex-col gap-3">
-        <label className="font-bold text-lg">Photo</label>
+        <label className="font-bold text-lg">
+          Photo
+        </label>
+
         <div className="flex flex-col sm:flex-row gap-3">
           <input
             type="file"
@@ -110,44 +206,70 @@ export function UploadPanel({
             ref={fileInputRef}
             onChange={handleFileChange}
           />
+
           <button
-            onClick={() => fileInputRef.current?.click()}
+            type="button"
+            onClick={() =>
+              fileInputRef.current?.click()
+            }
             className="flex-1 border-sketch-sm bg-pastel-pink hover:bg-pink-300 transition-colors px-4 py-3 flex items-center justify-center gap-2 font-bold shadow-sm"
           >
             <IconUpload size={20} />
             Upload your photo
           </button>
+
           <button
-            disabled
-            title="Coming soon!"
-            className="flex-1 border-sketch-sm bg-gray-200 text-gray-500 px-4 py-3 flex items-center justify-center gap-2 font-bold cursor-not-allowed opacity-70"
+            type="button"
+            onClick={handleGeneratePortrait}
+            disabled={
+              !selectedFile || isGenerating
+            }
+            className="flex-1 border-sketch-sm bg-pastel-yellow hover:bg-yellow-300 transition-colors px-4 py-3 flex items-center justify-center gap-2 font-bold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <IconWand size={20} />
-            Generate cute portrait
+
+            {isGenerating
+              ? 'Generating...'
+              : 'Generate cute portrait'}
           </button>
         </div>
       </div>
 
-      {/* ─── AI Profile Questions ─── */}
+      {/* AI Profile Questions */}
       <div className="border-t-[3px] border-dashed border-card-outline/20 pt-5 flex flex-col gap-5">
         <div className="flex items-center gap-2">
           <span className="text-lg">🤖</span>
+
           <p className="font-bold text-base text-card-outline">
             Help the AI find your best match
           </p>
         </div>
+
         <p className="text-sm opacity-60 -mt-3 font-sans">
-          These answers help suggest the most suitable protection plan for you.
+          These answers help suggest the most
+          suitable protection plan for you.
         </p>
 
         {/* Gender */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-base">Gender</label>
+          <label className="font-bold text-base">
+            Gender
+          </label>
+
           <ButtonGroup<Gender>
             options={[
-              { label: 'Male', value: 'male' },
-              { label: 'Female', value: 'female' },
-              { label: 'Prefer not to say', value: 'prefer-not-to-say' },
+              {
+                label: 'Male',
+                value: 'male',
+              },
+              {
+                label: 'Female',
+                value: 'female',
+              },
+              {
+                label: 'Prefer not to say',
+                value: 'prefer-not-to-say',
+              },
             ]}
             value={gender}
             onChange={onGenderChange}
@@ -156,25 +278,42 @@ export function UploadPanel({
 
         {/* Occupation */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-base">Occupation</label>
+          <label className="font-bold text-base">
+            Occupation
+          </label>
+
           <input
             type="text"
             value={occupation}
-            onChange={(e) => onOccupationChange(e.target.value)}
-            placeholder="e.g. Teacher, Engineer, Self-employed…"
-            className="border-sketch-sm px-4 py-2 font-sans text-base focus:outline-none focus:ring-4 ring-pastel-pink/50 bg-white"
+            onChange={(e) =>
+              onOccupationChange(e.target.value)
+            }
+            placeholder="Teacher, Engineer, Freelancer..."
+            className="border-sketch-sm px-4 py-2 bg-white"
           />
         </div>
 
-        {/* Monthly Income */}
+        {/* Income */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-base">Monthly Income (RM)</label>
+          <label className="font-bold text-base">
+            Monthly Income (RM)
+          </label>
+
           <ButtonGroup<IncomeRange>
             options={[
               { label: '< RM2k', value: '<2k' },
-              { label: 'RM2k – 5k', value: '2k-5k' },
-              { label: 'RM5k – 10k', value: '5k-10k' },
-              { label: '> RM10k', value: '>10k' },
+              {
+                label: 'RM2k – 5k',
+                value: '2k-5k',
+              },
+              {
+                label: 'RM5k – 10k',
+                value: '5k-10k',
+              },
+              {
+                label: '> RM10k',
+                value: '>10k',
+              },
             ]}
             value={incomeRange}
             onChange={onIncomeRangeChange}
@@ -183,7 +322,10 @@ export function UploadPanel({
 
         {/* Dependents */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-base">Number of Dependents</label>
+          <label className="font-bold text-base">
+            Number of Dependents
+          </label>
+
           <ButtonGroup<DependentsCount>
             options={[
               { label: '0', value: 0 },
@@ -198,26 +340,52 @@ export function UploadPanel({
 
         {/* Existing Coverage */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-base">Do you have existing insurance coverage?</label>
+          <label className="font-bold text-base">
+            Existing Insurance Coverage?
+          </label>
+
           <ButtonGroup<boolean>
             options={[
-              { label: 'Yes, I do', value: true },
-              { label: "No, I don't", value: false },
+              {
+                label: 'Yes',
+                value: true,
+              },
+              {
+                label: 'No',
+                value: false,
+              },
             ]}
             value={hasExistingCoverage}
-            onChange={onHasExistingCoverageChange}
+            onChange={
+              onHasExistingCoverageChange
+            }
           />
         </div>
 
         {/* Top Concern */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-base">What matters most to you right now?</label>
+          <label className="font-bold text-base">
+            What matters most?
+          </label>
+
           <ButtonGroup<TopConcern>
             options={[
-              { label: '🏥 Health costs', value: 'health' },
-              { label: '👨‍👩‍👧 Family security', value: 'family' },
-              { label: '💼 Income loss', value: 'income' },
-              { label: '📈 Wealth growth', value: 'wealth' },
+              {
+                label: '🏥 Health costs',
+                value: 'health',
+              },
+              {
+                label: '👨‍👩‍👧 Family security',
+                value: 'family',
+              },
+              {
+                label: '💼 Income loss',
+                value: 'income',
+              },
+              {
+                label: '📈 Wealth growth',
+                value: 'wealth',
+              },
             ]}
             value={topConcern}
             onChange={onTopConcernChange}
