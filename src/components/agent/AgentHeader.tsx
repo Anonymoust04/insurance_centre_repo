@@ -16,7 +16,7 @@ export function AgentHeader({ title, subtitle }: AgentHeaderProps) {
   });
 
   return (
-    <header className="px-6 py-4 flex items-center justify-between border-b-2 border-card-outline/20 bg-game-yellow shrink-0">
+    <header className="px-6 h-[85px] flex items-center justify-between border-b-2 border-card-outline/20 bg-game-yellow shrink-0">
       <div>
         <h1 className="font-handwriting text-2xl text-game-text leading-tight">{title}</h1>
         {subtitle && <p className="text-sm text-game-purple-deep mt-0.5">{subtitle}</p>}

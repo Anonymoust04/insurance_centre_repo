@@ -8,7 +8,7 @@ export default function AgentMissionsPage() {
         title="🎯 Daily Missions"
         subtitle="Complete missions to earn XP and climb the leaderboard."
       />
-      <main className="flex-1 p-6 overflow-y-auto max-w-2xl w-full mx-auto">
+      <main className="flex-1 p-6 overflow-y-auto max-w-4xl w-full mx-auto">
         <AgentMissions />
       </main>
     </div>
