@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CardData, EnergyType } from '@/types/card';
 import { IconFlame, IconDroplet, IconBolt, IconLeaf, IconEye, IconMountain, IconUser } from '@tabler/icons-react';
 
@@ -21,9 +21,10 @@ const getEnergyConfig = (type: EnergyType) => {
 export function CardPreview({ data }: CardPreviewProps) {
   const { name, image, energyType, plan, currentAge, targetAge } = data;
   const energyConfig = getEnergyConfig(energyType);
+  const [showTooltip, setShowTooltip] = useState(false);
   
-  // Calculate HP
-  const hp = Math.max(0, targetAge - currentAge);
+  // Protection Time = years of coverage remaining
+  const pt = Math.max(0, targetAge - currentAge);
 
   return (
     <div className="w-full max-w-md mx-auto aspect-[2.5/3.5] bg-pastel-yellow border-sketch p-3 sm:p-4 shadow-xl transform rotate-1 transition-transform hover:rotate-0 relative">
@@ -40,8 +41,29 @@ export function CardPreview({ data }: CardPreviewProps) {
             {name || 'Your Name'}
           </h2>
           <div className="flex items-center gap-1 sm:gap-2">
-            <div className="font-handwriting text-2xl sm:text-3xl font-bold text-red-600 tracking-tighter">
-              {hp} <span className="text-xl">HP</span>
+            {/* PT Badge with tooltip */}
+            <div
+              className="relative cursor-help"
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            >
+              <div className="font-handwriting text-2xl sm:text-3xl font-bold text-red-600 tracking-tighter select-none">
+                {pt} <span className="text-xl">PT</span>
+              </div>
+
+              {/* Tooltip */}
+              {showTooltip && (
+                <div className="absolute right-0 top-full mt-2 z-50 pointer-events-none">
+                  {/* Arrow */}
+                  <div className="absolute -top-1.5 right-4 w-3 h-3 bg-card-outline rotate-45" />
+                  <div className="bg-card-outline text-pastel-yellow font-handwriting text-sm px-3 py-2 whitespace-nowrap shadow-lg"
+                    style={{ borderRadius: '10px' }}
+                  >
+                    <p className="font-bold text-base">Protection Time Left</p>
+                    <p className="opacity-90 text-sm">({pt} years left)</p>
+                  </div>
+                </div>
+              )}
             </div>
             <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full border-sketch-sm flex items-center justify-center ${energyConfig.bgClass} shadow-sm z-10`}>
               {energyConfig.icon}
